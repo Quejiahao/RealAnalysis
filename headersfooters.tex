@@ -1,0 +1,22 @@
+% !Mode:: "TeX:UTF-8"
+
+\newcommand{\makefirstpageheadrule}{}
+\newcommand{\makeheadrule}{	% 定义正文页页眉线绘制命令, 单线
+\rule[0.7\baselineskip]{\headwidth}{0.4pt}}
+
+\newboolean{first}	% 定义一个布尔变量用于判断是否为首页
+\setboolean{first}{true}	% 设定 first 变量初值为 true, 根据布尔变量 first 为 true 或 false 分别执行不同的页眉线绘制命令
+\renewcommand{\headrule}{\ifthenelse{\boolean{first}}{\makeheadrule}{\makefirstpageheadrule}}
+
+\fancypagestyle{plain}{\setboolean{first}{false}	% 在 plain 样式的定义中将 first 重置为 false
+\lhead{} \chead{} \rhead{}
+\lfoot{} \cfoot{} \rfoot{}}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE]{\kaishu\zihao{-5}\thepage\quad \leftmark}
+\fancyhead[RO]{\kaishu\zihao{-5}\rightmark\quad \thepage}
+\renewcommand\sectionmark[1]{%
+\markright{\CTEXifname{\CTEXthesection\quad}{}#1}}
+\renewcommand\chaptermark[1]{%
+\markboth{\CTEXthechapter\quad #1}{}}
