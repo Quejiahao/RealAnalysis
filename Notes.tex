@@ -46,6 +46,8 @@
 
 %-------------------- 字体设置 --------------------
 \input{../template/fonts}
+\setCJKfamilyfont{FZQTJW}{方正启体简体.TTF}
+\newcommand{\qiti}{\CJKfamily{FZQTJW}}
 
 %-------------------- 自定义符号 --------------------
 \input{../template/symbols}
@@ -85,7 +87,7 @@
 \chapter{用开集刻画可测集}	%\S 3.1.4
 
 \begin{Theorem}\label{thm:OpenMeas}
-	设 $E \subset \R^n$. $E$ 可测当且仅当对于任意的 $\varepsilon > 0$, 存在开集 $G \subset E$, 使得 $m^*(G \setminus E) < \varepsilon$.
+	设 $E \subset \R^n$. $E$ 可测当且仅当对于任意的 $\varepsilon > 0$, 存在开集 $G \supset E$, 使得 $m^*(G \setminus E) < \varepsilon$.
 \end{Theorem}
 
 \begin{Proof}

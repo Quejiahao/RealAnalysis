@@ -1,0 +1,1554 @@
+% !Mode:: "TeX:UTF-8"
+%-------------------- 文类 --------------------
+\documentclass[UTF8, a4paper, 12pt, oneside, onecolumn]{article}
+
+%-------------------- 宏包 --------------------
+\ExplSyntaxOn
+\msg_redirect_name:nnn{fontspec}{no-script}{info}	% 抑制 fontspec 警告
+\ExplSyntaxOff
+\usepackage[table]{xcolor}	% 表格着色
+\usepackage[toc, page]{appendix}
+\usepackage{amscd}	% 交换图
+\usepackage[tbtags]{amsmath}	% 数学, 底部序号
+\usepackage{amsopn}
+\usepackage{amssymb}
+\usepackage{array}	% 数组环境
+\usepackage{anyfontsize}	% 消除 Font shape `OT1/cmss/m/n' in size <4> not available
+\usepackage{animate}	% 插入 gif
+\usepackage{algorithm}	% 算法环境
+\usepackage{algpseudocode}	% 算法环境
+\usepackage{bm}	% 数学粗体斜体
+\usepackage{calc}
+\usepackage{cases}	% 括号宏包
+\usepackage{changes}	% 标注批改
+\usepackage[space,	% 保留汉字与英文或数字之间的空格
+			heading,	% 开启章节标题设置功能
+			UTF8,	%编码为 UTF-8
+			fontset = fandol	% 使用 fandol 中文字体
+			]{ctex}	% 文档类为 article 或 book 时需要开启, ctexart 或 ctexbook 则不需要
+\usepackage{dsfont}	% \mathds{} 字体
+\usepackage{enumerate}	% 编号
+\usepackage{enumitem}
+\usepackage{fancyhdr}	% 页眉页脚等
+\usepackage[T1]{fontenc}
+\usepackage{fontspec}	% 字体设置, 需要 XeLaTeX
+\usepackage{geometry}	% 调节纸张等
+\usepackage{latexsym}
+\usepackage{mathrsfs}
+\usepackage[amsmath, thmmarks]{ntheorem}	% 定理宏包
+\usepackage{setspace}	% 用于设置行距
+\usepackage{verbatim}	% 提供 comment 环境
+\usepackage{commath}	% 微分算子, 偏微算子
+\usepackage{totpages}	% 进阶功能用 pageslts 替代
+\usepackage{layout}
+\usepackage{graphicx}	% 插图
+\usepackage{booktabs}
+\usepackage{longtable}	% 长表格
+\usepackage{ifthen}	% 这个宏包提供逻辑判断命令
+\usepackage[nodayofweek]{datetime}
+\usepackage{lipsum}
+%\usepackage{titlesec}	% 标题形式
+\usepackage{titletoc}	% 标题形式
+\usepackage{multicol}	% 分栏显示
+\usepackage{listings}	% 显示代码
+\usepackage{blkarray}	% 标记矩阵???
+\usepackage{cite}	% 参考文献标注
+\usepackage{comment}	% 注释
+\usepackage[stable]{footmisc}	% 脚注
+%\usepackage{pageslts}
+\usepackage{pdfpages}	% 嵌入 PDF
+\usepackage{tikz}	% 画图
+\usepackage{tikz-cd}	% 交换图
+\usetikzlibrary{calc}
+\usetikzlibrary{decorations.markings}
+\usepackage{textcomp}
+%\IfFileExists{trackchanges.sty}{\usepackage{trackchanges}}{\usepackage{../template/packages/trackchanges}}
+\usepackage{gensymb}
+\usepackage{float}	% 浮动体
+\usepackage{bbm}	% \mathbbm
+\usepackage{subcaption}	% 图表标题
+\usepackage{multirow}	% 表格跨行
+\usepackage{diagbox}	% 表格斜线
+\usepackage{extarrows}	% 箭头
+\usepackage{eso-pic}	% 水印
+\usepackage{mathtools}
+\usepackage{emptypage}	% 空白页不显示页眉
+\usepackage{qrcode}	% 二维码
+\usepackage{printlen}	% 显示长度变量
+\usepackage[all, cmtip]{xy}	% 交换图
+\usepackage[unicode,
+			colorlinks	= true,
+			linkcolor	= black,
+			urlcolor	= black,
+			citecolor	= black,
+			anchorcolor	= blue]{hyperref}	% 参考文献超链接
+\IfFileExists{\jobname.aux}{}{\renewcommand{\filemoddate}[1]{D:\pdfdate+08'00'}}	% 在没有 \jobname.aux 文件的时候防止 hyperxmp 报错
+\usepackage{hyperxmp}	% pdfinfo
+
+\usepackage{algorithm}	% 算法环境
+\usepackage{algpseudocode}	% 算法环境
+\usepackage{float}	% 浮动体
+
+
+%-------------------- 杂项 --------------------
+\geometry{left = 2.5 cm, right = 2.5 cm, top = 2.5 cm, bottom = 2.5 cm,	% 页边距
+	headheight = 40 pt, headsep = 15 pt,	% 页眉距离
+	marginparwidth = 4 cm, marginparsep = 10 pt}	% 边注设置
+%\renewcommand{\baselinestretch}{1.5}	% 行距, 系统默认约 1.2, ctex 默认约 1.56
+%\linespread{1}	% 行距
+
+\newcommand\blfootnote[1]{%
+	\begingroup%
+	\renewcommand\thefootnote{}\footnote{#1}%
+	\addtocounter{footnote}{-1}%
+	\endgroup
+}
+
+\newcommand{\upcite}[1]{\textsuperscript{\textsuperscript{\cite{#1}}}}
+\newcommand{\upref}[1]{\textsuperscript{\textsuperscript{\ref{#1}}}}
+
+\setcounter{MaxMatrixCols}{20}	% 矩阵最大列数
+
+% 矩阵行距
+\makeatletter
+\renewcommand*\env@matrix[1][\arraystretch]{%
+	\edef\arraystretch{#1}%
+	\hskip -\arraycolsep
+	\let\@ifnextchar\new@ifnextchar
+	\array{*\c@MaxMatrixCols c}}
+\makeatother
+
+% 水印
+\newcommand{\watermark}[3]{\AddToShipoutPictureBG{
+\parbox[b][\paperheight]{\paperwidth}{
+\vfill%
+\centering%
+\tikz[remember picture, overlay]%
+	\node [rotate = #1, scale = #2] at (current page.center)%
+		{\textcolor{gray!80!cyan!30}{#3}};
+\vfill}}}
+%\newcommand{\watermarkoff}{\ClearShipoutPictureBG}
+
+%\xeCJKsetup{CJKecglue={}}
+
+\raggedbottom	% 防止报 Underfull \vbox (badness 10000) has occurred while \output is active []
+
+\allowdisplaybreaks[2]	% 公式内允许换页
+
+%\pagenumbering{arabic}
+
+\hypersetup
+{
+	% 颜色
+	colorlinks	= true,
+	linkcolor	= black,
+	urlcolor	= black,
+	citecolor	= black,
+	anchorcolor	= blue,
+}
+
+%-------------------- 字体设置 --------------------
+\newcommand{\chuhao}{\fontsize{42.2pt}{\baselineskip}\selectfont}
+\newcommand{\xiaochu}{\fontsize{36.1pt}{\baselineskip}\selectfont}
+\newcommand{\yihao}{\fontsize{26.1pt}{\baselineskip}\selectfont}
+\newcommand{\xiaoyi}{\fontsize{24.1pt}{\baselineskip}\selectfont}
+\newcommand{\erhao}{\fontsize{22.1pt}{\baselineskip}\selectfont}
+\newcommand{\xiaoer}{\fontsize{18.1pt}{\baselineskip}\selectfont}
+\newcommand{\sanhao}{\fontsize{16.1pt}{\baselineskip}\selectfont}
+\newcommand{\xiaosan}{\fontsize{15.1pt}{\baselineskip}\selectfont}
+\newcommand{\sihao}{\fontsize{14.1pt}{\baselineskip}\selectfont}
+\newcommand{\xiaosi}{\fontsize{12.1pt}{\baselineskip}\selectfont}
+\newcommand{\wuhao}{\fontsize{10.5pt}{\baselineskip}\selectfont}
+\newcommand{\xiaowu}{\fontsize{9.0pt}{\baselineskip}\selectfont}
+\newcommand{\liuhao}{\fontsize{7.5pt}{\baselineskip}\selectfont}
+\newcommand{\xiaoliu}{\fontsize{6.5pt}{\baselineskip}\selectfont}
+\newcommand{\qihao}{\fontsize{5.5pt}{\baselineskip}\selectfont}
+\newcommand{\bahao}{\fontsize{5.0pt}{\baselineskip}\selectfont}
+%\fontsize{10pt}{\baselineskip}
+
+%\setCJKfamilyfont{FZQTJW}{方正启体简体}
+%\newcommand{\qiti}{\CJKfamily{FZQTJW}}
+
+% 设置字体
+%\setCJKmainfont{方正启体简体}
+%\setmainfont{Times New Roman}
+%\setmainfont{CMU Serif}	% 实现英文, 希腊文, 拉丁文, 西班牙文, 俄文, 中文的混排, macOS 需安装字体
+%\setsansfont{Cambria Math}
+%\setmonofont{Cambria Math}
+%\setmathfont{Cambria Math}
+
+%-------------------- 标题样式 --------------------
+%\renewcommand\refname{参考文献}
+%\renewcommand\abstractname{摘要}
+%\ctexset{section = {
+%	name = {\S},
+%	number = \arabic{section},
+%	}
+%}
+\ctexset{
+	contentsname = {\zihao{3}\mdseries\heiti 目录},
+	part = {format = {\zihao{3}\mdseries\heiti\centering}},
+	section = {
+		format = {\zihao{-4}\mdseries\heiti\flushleft},
+		number = \bfseries{\arabic{section}}
+	},
+	subsection = {
+		format = {\zihao{5}\mdseries\heiti\flushleft},
+		number = \bfseries{\arabic{section}.\arabic{subsection}}
+	},
+	subsubsection = {format = {\zihao{5}\mdseries\songti\flushleft}},
+}
+
+\titlecontents{part}
+			[0em]
+			{\zihao{3}\mdseries\heiti}
+			{\contentslabel{0em}}
+			{\hspace*{0em}}
+			{\hfill \bfseries\contentspage}
+
+\titlecontents{section}
+			[2.3em]
+			{\zihao{-4}\mdseries\heiti}
+			{\contentslabel{2.3em}}
+			{\hspace*{-2.3em}}
+			{\titlerule*[1pc]{.} \bfseries\contentspage}
+
+\titlecontents{subsection}
+			[5.5em]
+			{\zihao{5}\mdseries\heiti}
+			{\contentslabel{3.2em}}
+			{\hspace*{-3.2em}}
+			{\titlerule*[1pc]{.} \bfseries\contentspage}
+
+\titlecontents{subsubsection}
+			[8.5em]
+			{\zihao{5}\mdseries\songti}
+			{\contentslabel{3.9em}}
+			{\hspace*{-3.9em}}
+			{\titlerule*[1pc]{.} \contentspage}
+
+\floatname{algorithm}{\mdseries\heiti 算法}
+\renewcommand{\algorithmicrequire}{\heiti 输入:}
+\renewcommand{\algorithmicensure}{\heiti 输出:}
+\renewcommand\appendixname{附录}
+\renewcommand\appendixtocname{附录}
+\renewcommand\appendixpagename{\zihao{-4}\mdseries\heiti 附录}
+
+\makeatletter
+\@addtoreset{section}{part}
+\makeatother
+
+\numberwithin{equation}{section}
+\numberwithin{figure}{section}
+\numberwithin{table}{section}
+
+\DeclareCaptionFont{song}{\songti}
+\DeclareCaptionFont{hei}{\heiti}
+\DeclareCaptionFont{minusfive}{\zihao{-5}}
+\DeclareCaptionFont{five}{\zihao{5}}
+\captionsetup*[figure]{	% 图标题设置
+	font={song, minusfive}	% 宋体小五
+}
+\captionsetup*[table]{	% 表标题设置
+	font={hei, minusfive}	% 黑体小五
+}
+\captionsetup*[algorithm]{	% 算法标题设置
+	font={song, minusfive}	% 宋体小五
+}
+
+\title{\zihao{0}\mdseries\heiti Title}
+\author{\zihao{-0}\mdseries\kaishu 阙嘉豪}
+\date{\zihao{1}\mdseries 最后编译时间: \number\year ~年 \number\month ~月 \number\day ~日 \currenttime}
+
+%-------------------- 自定义符号 --------------------
+\def\<{\left\langle}
+\def\>{\right\rangle}
+\def\({\left(}
+\def\){\right)}
+\def\-{\textrm{-}}	% 数学环境内使用 -, 而不是减号
+\def\1{\mathbbm{1}}
+\def\a{\alpha}
+\def\A{\bm{A}}
+\def\AC{\mathrm{AC}}
+\def\al{\bm\alpha}
+\DeclareMathOperator{\argmin}{argmin}
+\def\ba{\beta}
+\def\bA{\bm A}
+\def\bbH{\mathbb{H}}
+\def\bbS{\mathbb{S}}
+\def\be{\bm\beta}
+\def\bh{\bm h}
+\newcommand{\bs}[2]{{\raisebox{.2em}{$#1$}\left/\raisebox{-.2em}{$#2$}\right.}}	% 斜线除号
+\def\bT{\mathbb{T}}
+\def\bU{\bm U}
+\def\BV{\mathrm{BV}}
+\def\bx{\bm x}
+\def\C{\mathbb{C}}	% 复数 C
+\def\mca{\mathcal}
+\def\cis{\displaystyle\bigcap_{k = 1}^\infty}
+\def\cov{\mathbf{Cov}}
+\def\csum{\displaystyle\sum_{k = 1}^\infty}
+\def\cT{\mathcal{T}}
+\def\cu{\displaystyle\bigcup_{k = 1}^\infty}
+\def\curl{\mathbf{curl}}
+\DeclareMathOperator{\ch}{ch}	% 双曲余弦
+\DeclareMathOperator{\diam}{diam}
+\def\de{\delta}
+\def\dba{\displaystyle\bigcap}	% 集合交
+\def\dbigcap{\displaystyle\bigcap}	% 集合交
+\def\dbigcup{\displaystyle\bigcup}	% 集合并
+\def\dbu{\displaystyle\bigcup}	% 集合并
+\def\di{\mathrm{d}}	% 微分算符 d
+\def\diff{\mathrm{d}}	% 微分算符 d
+\def\dinf{\displaystyle\inf}
+\def\divr{\mathbf{div}}
+\DeclareMathOperator{\diag}{diag}	% 对角矩阵 diag
+\def\dint{\displaystyle\int}
+\def\dlim{\displaystyle\lim}
+\def\dmax{\displaystyle\max}
+\def\dmin{\displaystyle\min}
+\def\dsum{\displaystyle\sum}	% 求和号
+\def\dsup{\displaystyle\sup}
+\def\dmmm{~\mathrm{dm^3}}
+\def\D{\Delta}
+\def\Di{\mathrm{D}}	% 微分算符 D
+\def\e{\mathrm{e}}	% 自然对数的底数
+\def\E{\mathbb{E}}	% \R 上赋予了欧氏拓扑
+\def\et{\bm\eta}
+\def\ep{\varepsilon}
+\def\fb{\bm f}
+\def\g{~\mathrm{g}}
+\def\ga{\bm\gamma}
+\def\geq{\geqslant}	% 大于或等于号, 下面一划是斜的
+\def\grad{\mathbf{grad}}
+\def\h{~\mathrm{h}}
+\def\heq{\mathbin{\widehat{=}}}
+\def\hin{\mathbin{\widehat{\in}}}
+\def\H{\mathrm{H}}	% 共轭转置 H
+\def\i{\mathrm{i}}	% 虚数单位 i
+\DeclareMathOperator{\id}{id}
+\DeclareMathOperator{\im}{Im}
+\def\I{\bm{I}}		% 单位矩阵 I
+\def\Int{\mathrm{Int}}	% 内部
+\def\J{~\mathrm{J}}
+\def\JK{~\mathrm{J}~\cdot ~\mathrm{K}^{-1}}
+\def\kJ{~\mathrm{kJ}}
+\def\K{~\mathrm{K}}
+\DeclareMathOperator{\Ker}{Ker}
+\def\l[{\left[}
+\def\lb{\left\{}
+\def\ld{\left.}
+\def\lllcdots{$%
+\cdots\cdots\cdots\cdots\cdots%
+\cdots\cdots\cdots\cdots\cdots%
+\cdots\cdots\cdots\cdots\cdots%
+\cdots\cdots\cdots\cdots\cdots$}
+\def\lrb#1{\left\{ #1 \right\}}
+\def\lrv#1{\left| #1 \right|}
+\def\lrvv#1{\left\| #1 \right\|}
+\def\lv{\left|}
+\def\leq{\leqslant}	% 小于或等于号, 下面一划是斜的
+\def\mf#1{\marginpar{\footnotesize #1}}
+\def\m{\mathrm{m}}
+\def\mol{~\mathrm{mol}}
+\def\mr{\mathring}
+\def\ms#1{\marginpar{\scriptsize #1}}
+\def\N{\mathbb{N}}	% 自然数集 N
+\def\om{\omega}
+\def\oR{\overline{\mathbb{R}}}
+\def\ol{\overline}
+\def\p{\varphi}
+\DeclareMathOperator{\proj}{proj}	% 向量的投影 proj
+\def\pa{\partial}
+\def\Pa{~\mathrm{Pa}}
+\def\pl{\mathbin{/\mskip-2.5mu/}}
+\def\Q{\mathbb{Q}}	% 有理数 Q
+\def\qrh#1{\href{#1}{\XeTeXLinkBox{\qrcode{#1}}}}	% XeLaTeX 下使得二维码是超链接
+\def\r]{\right]}
+\def\rb{\right\}}
+\def\rd{\right.}
+\def\rv{\right|}
+\DeclareMathOperator{\rank}{rank}	% 矩阵的秩 rank
+\def\R{\mathbb{R}}	% 实数域 R
+\def\rel{\mathrm{rel}}
+\def\Rie{\mathcal{R}}	% 黎曼可积 R
+\def\RP{\mathbb{RP}}	% 实数域 R
+\def\RR{\mathrm{R}}
+\def\s{~\mathrm{s}}
+\def\scr{\mathscr}
+\DeclareMathOperator{\sign}{sign}	% 映射度
+\def\sg{\sigma}
+\DeclareMathOperator{\sgn}{sgn}	% 符号函数
+\DeclareMathOperator{\sh}{sh}	% 双曲正弦
+\def\sn{\mathrm{span}}
+\def\st{~\textrm{s.t.}~}
+\def\sx{\mathscr{X}}
+\DeclareMathOperator{\supp}{supp}	% 支撑集
+\def\T{\mathrm{T}}	% 转置 T
+\def\te{\theta}
+\def\tr{\mathrm{tr}}	% 矩阵的迹 tr
+\DeclareMathOperator{\tah}{th}	% 双曲正切
+\def\U{\mathring{U}}	% 去心邻域 U 上面有一圈
+\def\V{~\mathrm{V}}
+\def\wh{\widehat}
+\def\wt{\widetilde}
+\def\xra{\xrightarrow}
+\def\xle{\xlongequal}
+\def\xlra{\xlongrightarrow}
+\def\xLra{\xLongrightarrow}
+\def\Z{\mathbb{Z}}	% 整数 Z
+
+%-------------------- 自定义环境 --------------------
+\theoremstyle{nonumberplain}	% 预定格式
+\theoremheaderfont{\normalfont\heiti}	% 标题字体
+\theorembodyfont{\songti}	% 陈述字体, 默认 \itshape
+\theoremseparator{}	% 标题与陈述分割符号
+\theoremindent 0em	% 左缩进
+\theoremnumbering{arabic}	% 计数形式
+\theoremsymbol{$\square$}	% 结束符, 应用于所有定理类, 默认空
+\newtheorem{Proof}{\hspace*{4.5ex}证明}
+\newtheorem{Solve}{\hspace*{4.5ex}解}
+
+\theoremstyle{plain}	% 预定格式
+\theoremheaderfont{\normalfont\heiti}	% 标题字体
+\theorembodyfont{\songti}	% 陈述字体, 默认 \itshape
+\theoremseparator{}	% 标题与陈述分割符号
+\theoremindent 0em	% 左缩进
+\theoremnumbering{arabic}	% 计数形式
+\theoremsymbol{}	% 结束符, 应用于所有定理类, 默认空
+\newtheorem{Example}{\hspace*{4.5ex}例}
+\newtheorem*{Rem}{\hspace*{4.5ex}注}
+\newtheorem{Remark}{\hspace*{4.5ex}注}
+
+\theoremstyle{plain}	% 预定格式
+\theoremheaderfont{\normalfont\heiti}	% 标题字体
+\theorembodyfont{\kaishu}	% 陈述字体, 默认 \itshape
+\theoremseparator{}	% 标题与陈述分割符号
+\theoremindent 0em	% 左缩进
+\theoremnumbering{arabic}	% 计数形式
+\theoremsymbol{}	% 结束符, 应用于所有定理类, 默认空
+\newtheorem{Corollary}{\hspace*{4.5ex}推论}
+\newtheorem{Definition}{\hspace*{4.5ex}定义}
+\newtheorem{Theorem}{\hspace*{4.5ex}定理}
+\newtheorem{Lemma}{\hspace*{4.5ex}引理}
+\newtheorem{Proposition}{\hspace*{4.5ex}命题}
+\newtheorem{Exercise}{\hspace*{4.5ex}习题}
+\newtheorem{Axiom}{\hspace*{4.5ex}公理}
+
+\theoremstyle{plain}	% 预定格式
+\theoremheaderfont{\normalfont\bf}	% 标题字体
+\theorembodyfont{\normalfont}	% 陈述字体, 默认 \itshape
+\theoremseparator{}	% 标题与陈述分割符号
+\theoremindent 0em	% 左缩进
+\theoremnumbering{arabic}	% 计数形式
+\theoremsymbol{}	% 结束符, 应用于所有定理类, 默认空
+\newtheorem{corollary}{Corollary}
+\newtheorem{definition}{Definition}
+\newtheorem{proposition}{Proposition}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+
+\theoremstyle{plain}	% 预定格式
+\theoremheaderfont{\normalfont\itshape}	% 标题字体
+\theorembodyfont{\normalfont}	% 陈述字体, 默认 \itshape
+\theoremseparator{}	% 标题与陈述分割符号
+\theoremindent 0em	% 左缩进
+\theoremnumbering{arabic}	% 计数形式
+\theoremsymbol{}	% 结束符, 应用于所有定理类, 默认空
+\newtheorem{example}{Example}
+\newtheorem{remark}{Remark}
+
+\theoremstyle{nonumberplain}
+\theoremheaderfont{\normalfont\itshape}	% 标题字体
+\theorembodyfont{\normalfont}	% 陈述字体, 默认 \itshape
+\theoremseparator{}	% 标题与陈述分割符号
+\theoremindent 0em	% 左缩进
+\theoremnumbering{arabic}	% 计数形式
+\theoremsymbol{$\square$}	% 结束符, 应用于所有定理类, 默认空
+\newtheorem{proof}{Proof}
+\newtheorem{solution}{Solution}
+
+%-------------------- \item 编号 --------------------
+\AddEnumerateCounter{\chinese}{\chinese}{}	% 中文编号
+\renewcommand{\theenumi}{\arabic{enumi}}
+\renewcommand{\labelenumi}{\textbf{\theenumi}.}	% 设置第一级编号为 1.
+\renewcommand{\theenumii}{\arabic{enumii}}
+\renewcommand{\labelenumii}{(\theenumii)}	% 设置第二级编号为 (1)
+\renewcommand{\theenumiii}{\roman{enumiii}}
+\renewcommand{\labelenumiii}{(\theenumiii)}	% 设置第三级编号为 (i)
+
+\setlist[enumerate]{itemindent = 2em, leftmargin = 0ex, listparindent = 2em}
+\setlist[itemize]{itemindent = 2em, leftmargin = 0ex, listparindent = 2em}
+
+%-------------------- 代码样式设置 --------------------
+\lstset{
+	backgroundcolor	= \color{lightgray!30},
+	stringstyle		= \color{purple!40},
+	basicstyle		= {\small\ttfamily},
+	breaklines		= true,
+	keywordstyle	= \color{blue},
+	tabsize			= 4,
+	gobble			= 2,
+	numbers			= left,
+%	numberstyle		= \tiny,
+	frame			= single,
+	xleftmargin		= \ccwd,
+	numbersep		= \ccwd,
+	columns			= fullflexible,
+	emphstyle		= {\color{blue}\small\ttfamily},
+	emph			= {mkdir, rmdir, sudo, mount, umount, rm},
+}
+
+%-------------------- PDF 元信息, 建模时注释掉 --------------------
+\hypersetup
+{
+	pdftitle			= {题目},
+	pdfauthor			= {阙嘉豪},
+	pdfauthortitle		= {头衔},
+	pdfcreator			= {阙嘉豪的模板},
+	pdfcreationdate		= {1999-12-07T23:00:00+08:00},
+	%pdfmoddate			= {1999-12-07T23:00:00+08:00},
+	%pdfmetadate			= {2014-09-23T14:15:09-06:00},
+	%pdfdate				= {2014-09-23T14:15:09-06:00},
+	pdfcopyright		= {Copyright (C) 2020, Coumarin},
+	pdfsubject			= {主题},
+	pdfkeywords			= {关键字},
+	pdflicenseurl		= {https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh},
+	pdfcaptionwriter	= {阙嘉豪},
+	pdfcontactaddress	= {新街口外大街 19 号},
+	pdfcontactcity		= {北京市},
+	pdfcontactpostcode	= {100875},
+	pdfcontactcountry	= {中华人民共和国},
+	pdfcontactphone		= {+8618888888888},
+	pdfcontactemail		= {i@kumarino.com},
+	pdfcontacturl		= {%
+		https://kumarino.com,
+	},
+	pdflang				= {zh-cn},
+	pdfmetalang			= {zh-cn},
+	baseurl				= {https://kumarino.com},
+}
+
+%-------------------- 页眉页脚 --------------------
+\newcommand{\makefirstpageheadrule}{	% 定义首页页眉线绘制命令, 这里为等宽双线
+\makebox[0pt][l]{\rule[0.55\baselineskip]{\headwidth}{0.4pt}}%
+\rule[0.7\baselineskip]{\headwidth}{0.4pt}}
+\newcommand{\makeheadrule}{	% 定义正文页页眉线绘制命令, 单线
+\rule[0.7\baselineskip]{\headwidth}{0.4pt}}
+
+\newboolean{first}	% 定义一个布尔变量用于判断是否为首页
+\setboolean{first}{true}	% 设定 first 变量初值为 true, 根据布尔变量 first 为 true 或 false 分别执行不同的页眉线绘制命令
+% \renewcommand{\headrule}{\ifthenelse{\boolean{first}}{\makeheadrule}{\makefirstpageheadrule}}
+
+% \ctexset {today = old}
+\newdateformat{monthyeardate}{\monthname[\THEMONTH], \THEYEAR}
+\renewcommand{\dateseparator}{\shortdate}
+\fancypagestyle{plain}{\setboolean{first}{false}	% 在 plain 样式的定义中将 first 重置为 false
+\lhead{\songti\zihao{-5} \number\year ~年 \number\month ~月} \chead{\zihao{-5} 郇正浩} \rhead{\zihao{-5}\currenttime, \today}%\monthyeardate\today}
+\lfoot{} \cfoot{} \rfoot{}}
+
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\zihao{5} \number\year~年~\number\month~月} \chead{\zihao{5} 实变函数} \rhead{\zihao{5}  }
+\lfoot{} \cfoot{\zihao{-5}\thepage} \rfoot{}
+
+% 奇偶页页眉
+%\pagestyle{fancy}
+%\fancyhf{}
+%\fancyhead[LE]{\kaishu\zihao{-5}\thepage\quad \leftmark}
+%\fancyhead[RO]{\kaishu\zihao{-5}\rightmark\quad \thepage}
+%\renewcommand\sectionmark[1]{%
+%\markright{\CTEXifname{\CTEXthesection\quad}{}#1}}
+
+%-------------------- 正文 --------------------
+\begin{document}
+
+\title {\erhao \bf 实变函数习题答案}
+\author{2019级 郇正浩}
+\date{\bf 作者想说的话}
+
+
+% 生成标题
+\maketitle
+因为课本没有自带习题答案，而我在网上搜到的又有不少错误，于是我就随手打的一份习题答案，可能会有不少错误，如有问题欢迎指出。另外有些题目我也不会，还希望各位能提供一份正确答案，以备更正。
+
+在此特别感谢李胤基同学，为我提供了相当多题目的答案.
+
+同时感谢阙嘉豪师兄为我提供的\LaTeX 模板.
+
+本答案初稿完成于2021年5月30日.
+
+{\bf 免责声明:本PDF只供内部传阅,不作商业用途.}
+
+
+
+\newpage
+% 设置页码格式是罗马数字
+\pagenumbering{roman}
+% 生成目录
+\tableofcontents
+% 插入新页
+\newpage
+% 设置页码格式是阿拉伯数字
+\pagenumbering{arabic}
+
+
+
+
+\part{习题一}
+\begin{enumerate}
+	\item {\bf 分析:}这种问题基本都是根据数学分析中学习的关于极限的定义,写成任意、存在的形式,然后将$\forall$换为$\cap$,$\exists$换为$\cup$.注意,这种方法里,$\varepsilon>0,\delta>0$之类的将会换成$\frac{1}{k}$之类的形式。
+	
+	所以$\displaystyle\{x:\varlimsup_{j\rightarrow \infty}f_j(x)>0\}$由定义,可以表示为:
+	
+	$$\exists k\in \mathbb{N*},\forall n\in \mathbb{N*},\exists j>n,f_j(x)>\frac{1}{k}$$
+	
+	也即:
+	$$\{x:\varlimsup_{j\rightarrow \infty}f_j(x)>0\}=\displaystyle\bigcup_{k=1}^{\infty}\bigcap_{n=1}^{\infty}\bigcup_{j=n}^{\infty}\{x:f_j(x)>\frac{1}{k}\}$$
+	\item 本题已默认$\displaystyle\lim_{n\rightarrow \infty}E_n,\displaystyle\lim_{n\rightarrow \infty}f_n(x)$存在,此时有:
+	\begin{align*}
+	x\in \lim_{n\rightarrow \infty} E_n&\Longleftrightarrow x\in \bigcup_{N=1}^{\infty}\bigcap_{n=N}^{\infty}E_n\\
+	&\Longleftrightarrow \exists N,n>N\text{时}x\in E_n\\
+	&\Longleftrightarrow \exists N,n>N\text{时}f(x)\geqslant\frac{1}{2}\\
+	&\Longleftrightarrow \lim_{n\rightarrow \infty}f(x)\geqslant\frac{1}{2}\\
+	&\Longleftrightarrow \lim_{n\rightarrow \infty}f(x)=1\\
+	&\Longleftrightarrow x\in [a,b]\backslash E\\
+	\end{align*}
+	所以$\displaystyle\lim_{n\rightarrow \infty} E_n=[a,b]\backslash E$
+	
+	\item 只需用$\displaystyle\varliminf_{n\rightarrow \infty} E_n=\bigcup_{N=1}^{\infty}\bigcap_{n=N}^{\infty}E_n,\displaystyle\varlimsup_{n\rightarrow \infty} E_n=\bigcap_{N=1}^{\infty}\bigcup_{n=N}^{\infty}E_n$
+	\begin{enumerate}
+		\item 
+		\begin{align*}
+		x\in \varlimsup_{n\rightarrow \infty}  A_n\bigcup B_n &\Longleftrightarrow x\in\bigcap_{N=1}^{\infty}\bigcup_{n=N}^{\infty}\left(A_n\bigcup B_n \right)\\
+		&\Longleftrightarrow\forall N,\exists n>N,x\in A_n\bigcup B_n\\
+		&\Longleftrightarrow\forall N,\exists n>N,x\in A_n\text{或} x\in B_n\\
+		&\Longleftrightarrow\forall N,\exists n>N,x\in A_n\text{或} \forall N,\exists n>N,x\in B_n\\		
+		&\Longleftrightarrow x\in(\varlimsup_{n\rightarrow \infty} A_n)\bigcup (\varlimsup_{n\rightarrow \infty} B_n)
+		\end{align*}
+		\item  在(1)中用$A^c_n$代替$A_n$,$B^c_n$代替$B_n$再取补集即可
+	\end{enumerate}
+	
+	\item 本题用集合元素相同来证明.
+	\begin{enumerate}
+		\item \begin{align*}
+			x\in f^{-1}(Y\backslash B)&\Longleftrightarrow f(x)\in Y\backslash B\\
+			&\Longleftrightarrow f(x)\in Y\text{且}f(x)\notin B\\
+			&\Longleftrightarrow x\in f^{-1}(Y)\text{且}x\notin f^{-1}(B)\\
+			&\Longleftrightarrow x\in f^{-1}(Y)\backslash f^{-1}(B)\\
+		\end{align*}
+		所以$f^{-1}(Y\backslash B)=f^{-1}(Y)\backslash f^{-1}(B)$
+		\item 结论是否定的.\\
+		取$f(x)=0,x\in \mathbb{R},X=\mathbb{R},A=\{0\},$不难验证结论错误
+	\end{enumerate}
+	\item 定义$f:[0,1]\rightarrow [0,1),f(x)=\left\{ \begin{array}{c} \displaystyle \frac{1}{k+1},x=\frac{1}{k},k\in\mathbb{N*}\\x,\text{otherwise}\end{array}\right.$,不难验证这是一一映射.所以$(r,\theta)\rightarrow~(f(r),\theta)$(极坐标表示),即为一种一一映射.
+	\item 我觉得这个题是错的,比如取Dirichlet函数$D(x),f(x)=D(x)+1,$满足所有条件但不满足结论.
+	\item 设$\displaystyle A_n=\{x:f(x)>\frac{1}{n}\},B_n=\{x:f(x)<-\frac{1}{n}\}$,由已知条件不难验证:
+	
+	$|A_n|<+\infty,|B_n|<+\infty$,
+	
+	所以$\displaystyle E=(\bigcup_{n=1}^{\infty}A_n)\bigcup(\bigcup_{n=1}^{\infty}B_n)$
+	\item {\bf 分析:}此题主要目的是建立一个$E\rightarrow \mathbb{Q}\times \mathbb{Q}$的单射.
+	
+	由条件知$\forall y\in E,\exists x_0\in \mathbb{R},\exists  \delta>0,\forall x \in(x_0-\delta,x_0+\delta),f(x)\geqslant f(x_0)=y_0,$则$\exists p,q\in\mathbb{Q},x_0-\delta<p<x_0<q<x_0+\delta,$做映射$g:y\rightarrow (p,q)$,下证这是单射.否则若$g(y_1)=(p_1,q_1)=(p_2,q_2)=g(y_2)$,由$(p,q)$的生成规则知,存在$x_1,x_2\in [p_1,q_1]=[p_2,q_2]$
+	
+	对$[p_1,q_1],$有$f(x)\geqslant f(x_1)$特别的$f(x_2)\geqslant f(x_1),$反之可得$f(x_1)\geqslant f(x_2)$,故有$y_1=f(x_1)=f(x_2)=y_2$,故为单射,因此$E$的基数为$\aleph_0$
+	\item {\bf   分析:}本题的要点是降低维数,同时要使用一个重要的结论：可数个可数集的并依然是可数集.
+	
+	反证:若有不可数个点,则设$\{r_n\}=\mathbb{Q}$,从$E$中取定一点$P_0$,则有:
+	
+	$\displaystyle\bigcup_{n=1}^{\infty}\{P:|P-P_0|=r_n\}\supset E,$故$\exists n, \{P:|P-P_0|=r_n\}\bigcap E$为不可数集.
+	
+	再从$\{P:|P-P_0|=r_n\}\bigcap E$中取定一点$P_1$,重复上述操作可得,$\exists m,\{P:|P-P_1|=r_m\}\bigcap\{P:|P-P_0|=r_n\}\bigcap E$为不可数集.
+	
+	再在这个集合中取一点$P_2$重复上述操作得$\exists k,\{P:|P-P_2|=r_k\}\bigcap\{P:|P-P_1|=r_m\}\bigcap\{P:|P-P_0|=r_n\}\bigcap E$是不可数集.显然,这个集合至多有两个点,这是不可能的.
+	
+	\textbf{注:}实际上,归纳可以得到结论对$\mathbb{R}^n$成立. 这个题的一维情况是显然的,但也可以通过画一画二维的情况来得到思路。
+	\item %不难验证$A=E\bigcap \{(x,y):|y|>|x|\},B=E\bigcap \{(x,y):|y|\leqslant|x|\}$满足条件.
+	设$E_1=\{x:\exists a\in\mathbb{R},(x,a)\in E\},E_2=\{y:\exists b\in\mathbb{R},(b,y)\in E\}$,则$E_1,E_2$可数.
+	
+	设$E_1=\{x_n\},E_2=\{y_n\},M=E_1\times E_2=\{(x,y):x\in E_1,y\in E_2\} $,则$E\subset M$.
+	
+	设$A_0=\{(x_m,y_n):m,n\in \mathbb{N*},m\leqslant n\},B_0=\{(x_m,y_n):m,n\in \mathbb{N*},m > n\}$.
+	
+	令$A=A_0\bigcap E,B=B_0\bigcap E$则$A,B$满足条件.
+	\item 设$\displaystyle E=\{r_n\}$,则存在函数列$\displaystyle\{f_{1,n}\}$在$r_1$处收敛,然后可以在此子列中取$\displaystyle\{f_{2,n}\}$在$r_2$处收敛,重复上述过程可以得到$\displaystyle\{f_{k,n}\}_{k,n\in\mathbb{N*}}$.
+	
+	取$\displaystyle\{f_{n,n}\}_{n\in\mathbb{N*}}$即可在$E$上得任何一个点收敛.
+	
+	\item \textbf{分析:}此题只需注意到$[0,1]^{\infty}$的基数也是$c$即可.
+	
+	不妨设$E=[0,1]^{\infty}$(否则可通过映射映到这个集合),$A_k\subset [0,1]^{\infty}$.由$\displaystyle\overline{\overline{A_n}}<c$可知,$\exists x_n\in [0,1]$,$  $使得$A_n$中不存在第$n$个分量是$x_n$的元素,故$\displaystyle(x_1,x_2,\cdots,x_n,\cdots)\notin \bigcup_{n=1}^{\infty}A_n,$也即$\displaystyle\bigcup_{n=1}^{\infty}A_n\neq E$
+	
+	\item 本题中,我默认“递增”是指“非严格递增”。
+	
+	只需证明$E^c$是开集.(下用定义证明)
+		
+	$\forall x_0\notin E,\exists \varepsilon_0>0,f(x_0+\varepsilon_0)=f(x_0-\varepsilon_0),$由$f$递增知,$\forall  x\in(x_0+\varepsilon_0,x_0-\varepsilon_0),f(x)=f(x_0),$取$\varepsilon$满足$x_0-\varepsilon_0<x-\varepsilon<x+\varepsilon<x_0+\varepsilon+0$可得$f(x-\varepsilon)=f(x+\varepsilon)$也即$x\in E^c$,故$(x_0+\varepsilon_0,x_0-\varepsilon_0)\subset E^c$,故$E^c$为开集也即$E$为闭集.
+	
+	\item 有界点列必有收敛子列,故$E'\neq \Phi$,由$F$是闭集知$E'\subset F$,故$E'\bigcap F\neq \Phi$.
+	
+	反之,先证明这种$F$有界.否则$\forall n\in \mathbb{N*},\exists x_n\in F$使得$|x_n|>n$,令$E=\{x_n\}$,则$E\subset F$,$E$为无限集且$E'=\Phi ,$与条件矛盾.故$F$有界.
+	
+	下面证明$F$是闭集.否则存在$x_0\in F'\backslash F$和点列$\{x_n\}\subset F,x_n\rightarrow x_0$,取$E=\{x_n\}$即可得到与题设矛盾.故$F$为闭集.综上即得结论.
+	
+	\item 只需用定义证明,E的任何一个聚点都在E中.
+	
+	$\forall t_0\in E',\exists \{t_n\}\subset E,t_n\rightarrow t_0,\exists \{x_n\},|x_n-t_n|=r.$不妨设$|t_n-t_0|<1,$则$|x_n-t_0|<r+1$,故$\{x_n\}$有界,故存在收敛子列,不妨设$x_n\rightarrow x_0,$对$n$取极限可得$|t_0-x_0|=|t_n-x_n|=r$,由$F$是闭集知$x_0\in F$,故$t_0\in E$.即证.
+	
+	\item 只需注意到$(\overline{A}\times B')\bigcup(A'\times\overline{B})=(A'\times B')\bigcup(A'\times B)\bigcup(A\times B')$每一部分均$\subset(A\times B)',$只需证明$(A\times B)'$的点必定属于上述三类之一即可.(略)
+	
+	\item 本题是错误的.反例:$E=\{(x,y):xy=1\}$,则$E$是闭集,但$E_y=\mathbb{R}\backslash\{0\}$不是闭集.
+	\item 只需注意到,$\mathbb{R}^n$上的紧集就是有界闭集(反之亦然).
+	
+	显然$\displaystyle\forall k,f(\bigcap_{k=1}^{\infty}F_k)\subset f(F_k)$,故有$\displaystyle f(\bigcap_{k=1}^{\infty}F_k)\subset \bigcap_{k=1}^{\infty}f(F_k)$
+	
+	$\displaystyle\forall y_0\in \bigcap_{k=1}^{\infty}f(F_k),\forall k\in \mathbb{N*},\exists x_k\in F_k,f(x_k)=y_0$,由$\{x_k\}$存在收敛子列,不妨设$x_k\rightarrow x_0$,则$\displaystyle f(x_0)=\lim_{k\rightarrow \infty}f(x_k)=y_0$,此时注意到$\displaystyle x_0\in \bigcap_{k=1}^{\infty}F_k$,故$\displaystyle  \bigcap_{k=1}^{\infty}f(F_k)\subset f(\bigcap_{k=1}^{\infty}F_k)$.
+	
+	综上可知结论成立.
+	
+	\item 由连续点的定义知,若$\displaystyle f\notin C(\mathbb{R}),\exists x_0,w_f(x_0)>0,$设$\displaystyle w_f(x_0)=w_0$.
+	
+	取$p\in \mathbb{Q},q\in \mathbb{Q}$且$\displaystyle f(x_0)-\frac{w_0}{2}<p<f(x_0)<q<f(x_0)+\frac{w_0}{2}$,$\displaystyle \forall n\in \mathbb{N*},\exists x_n\in B(x_0,\frac{1}{n}),f(x_n)>q~or~f(x_n)<p,$由$f$的介值性,$\displaystyle \exists y_n\in B(x_0,\frac{1}{n}),f(y_n)=q~or f(y_n)=p$。
+	
+	结合$\displaystyle\lim_{n\rightarrow \infty}y_n=x_0,\lim_{n\rightarrow \infty}f(y_n)\neq f(x_0) ,$这与$\{x\in \mathbb{R}:f(x)=p~or~f(x)=q\}$为闭集矛盾.
+	\item 注意到$\overline{E_1}+E_2'=(E_1+E_2')\bigcup(E_1'+E_2')$再证明这两部分均为$(E_1+E_2)'$的子集即可(略).
+	
+	\item 若$\partial A=\Phi$注意到$\overline{A}=\partial A\bigcup \overset{\circ}{A}=\overset{\circ}{A}$故$\overline{A}$为开集.由$\overset{\circ}{A}\subset A\subset \overline{A}$可知$\overset{\circ}{A}= A= \overline{A}$,故$A$既为开集又为闭集,不难验证这种集合仅有$\mathbb{R}^n\&\Phi$
+	
+	\item 反证:若$\exists x\in G_1\bigcap \overline{G_2},$则$\exists \delta,B(x,\delta)\subset G_1$,且$B(x,\delta)\bigcap G_2\neq \Phi$
+	
+	这与$G_1\bigcap G_2=\Phi$矛盾.
+	
+	\item 取$E=G^c$显然.
+	
+	\item 若 $a,b,c,d$不全为0,猜一猜可以知道没有.
+	
+	否则,设$P_0=(x_0,y_0)$为内点,可得$z=P(x,y)$在$(x_0,y_0)$某邻域内的任意点的的各个方向的方向导度为0.取方向$y=x$可得
+	$$4ax^3+3bx^2+2cx+d=0$$
+	
+	对某个关于$x$的开区间成立,故必为零多项式也即$a=b=c=d=0$
+	
+	\item 设$F(x,y)=f(x)-y$,结论显然.
+	
+	\item 注意到$\mathbb{R}$中任何开集都可以写成两两不交的开区间的并,也即$\displaystyle\bigcup_{n=1}^{\infty}(a_k,b_k)$的形式.其中$a_k,b_k\in \mathbb{R}$,定义$f:\{\mathbb{R}\text{中所有开集}\}\rightarrow \mathbb{R}^{\infty}$,$f(\displaystyle\bigcup_{n=1}^{\infty}(a_k,b_k))=(a_1,b_1,a_2,b_2,\cdots) $显然这是单射.注意到$\overline{\overline{\mathbb{R}^{\infty}}}=c$,故$\overline{\overline{ \{\mathbb{R}\text{中所有开集}\} } }\leqslant c$,由显然$\{(-\infty,x):x\in \mathbb{R}\}$中每个元素都是开集且$\overline{\overline{ \{(-\infty,x):x\in \mathbb{R}\} } }=c$
+	
+	综上可知$\overline{\overline{ \{\mathbb{R}\text{中所有开集}\} } }=c$
+	
+	\item 若结论不成立,则$\displaystyle\bigcap_{\alpha}F_{\alpha}=\Phi$则$\displaystyle \bigcup_{\alpha}F_{\alpha}^c=\mathbb{R}$,故存在可数个$\displaystyle F_{\alpha}^c$并为$\mathbb{R}$,设$\displaystyle\bigcap_{n=1}^{\infty}F_n=\Phi$设$\displaystyle A_m=\bigcap_{n=1}^{m}F_n$为非空有界单调递减闭集,故$\exists x_m\in A_m$,故$\{x_m\}$存在收敛子列,设极限点为$x_0$,则$\displaystyle x_0\in \bigcap_{m=1}^{\infty}A_m=\bigcap_{n=1}^{\infty}F_n=\Phi$,这是不可能的.
+	
+	
+	\item 在上题中用$F_{\alpha}\backslash G$代替$F_{\alpha}$,即为逆否命题.
+	
+	
+	\item 只需注意到存在有限个开球可以覆盖掉$K$.且找出的这个开覆盖$M$的并是开集.只需证明结论:若闭集$A,B$交为空,则$d(A,B)>0$.这个结论是显然的.故取$\varepsilon=d(M^c,K)$即可.
+	
+	\item 注意到$f'$具有介值性,故只需要用19题的结论即可.
+	
+	\item 不难验证$f$是单射,结合$f$连续可知$f$单调,不妨设$f$单调递增,则$f(x)>f(0)+ax(x>0),f(x)<f(0)+ax(x<0)$,结合介值性可知值域为$\mathbb{R}$
+	
+	\item 请参考本书$P_{13}$例13.
+	
+	\item 否则存在$(m,n)\subset[a,b],f'$在$(m,n)$上存在且连续.由$f'$不恒为0知,$\exists x_0\in (m,n),f'(x_0)\neq 0 ,$不妨设$f'(x_0)>0$,则$\exists \delta>0,\forall x\in B(x_0,\delta),f'(x)>0 $,故$f$在这个区间内没有极值点,与$f$极值点稠密矛盾.
+	
+	\item 只需注意到连续点集为$\displaystyle\bigcap_{n=1}^{\infty}\{x:w_f(x)<\frac{1}{n} \}$是$G_{\delta}$集,而$\mathbb{Q}$不是$G_{\delta}$集即可.
+	
+	这个结论的证明可参考本书$P_{43}$例13,$\{x:w_f(x)<\frac{1}{n} \}$是开集的证明可参考本书$P_{34}$例7.
+	
+	\item 自己试试吧,作者自己肯定是不会.
+	
+	\item $\forall x\in \partial E,\varepsilon>0,[x-\varepsilon,x+\varepsilon]\bigcap \overline{E}$是完全集.因此$[x-\varepsilon,x+\varepsilon]$中除了$E$中至多可列个点,还有不可列个$\overline{E}$中的点,结合$\varepsilon$任意性知$\partial E$在$\overline{E}$中稠密.
+	
+	\item 由$P_{34}$定理1.19(ii)可得任意开集是$F_{\sigma}$集,取补集得任意闭集是$G_{\delta}$集.
+	
+	\item
+	$\forall x_0 \in [0,1]$,若$f(x)$在$x_0$处极限存在,则取点列$\{x_n\},x_n\rightarrow x_0$则有$(x_n,f(x_n))\rightarrow (x_0,z_0) $,必有$z_0=f(x_0)$.
+	
+	若$f(x)$在$x_0$处极限不存在,则存在两组点列$\displaystyle\{x_n\}\{y_n\}$, $x_n\rightarrow x_0$, $y_n\rightarrow x_0$, $\lim_{n\rightarrow \infty}f(x_n)=z_1,$
+	$\displaystyle\lim_{n\rightarrow \infty}f(y_n)=z_2$且$z_1\neq z_2$.但$\displaystyle\lim_{n\rightarrow \infty}(x_n,f(x_n))= (x_0,z_1)\neq (x_0,z_2)=\lim_{n\rightarrow \infty}(y_n,f(y_n)) $不可能同时属于$G_f$,这与$G_f$是闭集矛盾.
+	
+	\item 反证,若$F$不为闭集,则$\exists x_0\notin F,\exists\{x_n\}\subset F,x_n\rightarrow x_0$,则令$\displaystyle f(x)=\frac{1}{x-x_0}$即无法连续延拓.
+	
+	\item 设$\displaystyle G_A=\bigcup_{x\in A}\{y:d(y,B)<\frac{d(x,B)}{2}\},\displaystyle G_B=\bigcup_{x\in B}\{y:d(y,A)<\frac{d(x,A)}{2}\}$.只需注意到$\forall x\in A,d(x,B)>0$以及任意个开集的并是开集即可.不难验证这个构造满足结论.
+	
+	\item 不难验证下面这个函数满足结论:
+	
+	$$\frac{d(x,F_1\bigcup F_2)+d(x,F_1\bigcup F_3)}{d(x,F_1\bigcup F_2)+2d(x,F_1\bigcup F_3)+d(x,F_2\bigcup F_3)}$$
+	
+	注:我配系数随手凑了一个:
+	\begin{align*}
+		f(x)=&\displaystyle\frac{1}{4}\left( \frac{3d(x,F_1)}{d(x,F_1)+d(x,F_2\bigcup F_3)}\right.\\
+		&+\frac{d(x,F_2)}{d(x,F_2)+d(x,F_1\bigcup F_3)}\\
+		&-\left.\frac{d(x,F_3)}{d(x,F_3)+d(x,F_2\bigcup F_1)}  \right)
+	\end{align*}
+	符合第二个条件且$\leqslant 1$。但我证明不了满足非负也推翻不了,希望各位能够指出这个构造的正确与否.
+\end{enumerate}
+
+\newpage
+
+\part{习题二}
+\begin{enumerate}
+	
+	\item 若$m^*(E)>0$,则由定义,存在开区间$\{J_n\}$,使得$E\subset \displaystyle\bigcup_{n=1}^{\infty}J_n$,且$\displaystyle \sum_{n=1}^{\infty}m(J_n)<\frac{m^*(E)}{q}$.
+	
+	由题设条件可知,$\forall n,\exists\{I_{n,k}\},E\cap J_n\subset \displaystyle\bigcup_{n=1}^{\infty}I_{n,k},$且有$\displaystyle \sum_{k=1}^{\infty}m(I_{n,k})<qm(J_n)$。
+	
+	对所有的$n$取并可得:$E\subset\displaystyle\bigcup_{n=1}^{\infty}\bigcup_{k=1}^{\infty}I_{n,k}$.
+	
+	但$m(\displaystyle\bigcup_{n=1}^{\infty}\bigcup_{k=1}^{\infty}I_{n,k})<\displaystyle q\sum_{n=1}^{\infty}m(J_{n})<m^*(E)$,这是不可能的.
+	
+	\item 取$A_2$的等测包$G$(无条件存在),则$m(G)=m(A_1)$,故$\forall T\subset \mathbb{R}^n$
+	\begin{align*}
+	m^*(T\bigcap A_2)+m^*(T\bigcap A_2^c)&\leqslant m^*(T\bigcap G)+m^*(T\bigcap A_1^c)\\
+	&\leqslant m^*(T\bigcap G)+m^*(T\bigcap G^c)+m^*(T\bigcap A_1^c\backslash G^c)\\
+	(\text{由}G\text{可测})&\leqslant m^*(T)+m^*( A_1^c\backslash G^c)\\
+	&=m^*(T)
+	\end{align*}
+	
+	故$m^*(T\bigcap A_2)+m^*(T\bigcap A_2^c)=m^*(T)$即$A_2$可测.
+	
+	\item 本题可以去掉一个条件.只需要$B$可测即可得到目标结论.
+	
+	由$B$可测，用$A,A\bigcup B$做试验集可得:
+	
+	$\left\{ \begin{array}{c}
+	m^*(A)=m^*(A\bigcap B)+m^*(A\bigcap B^c)\\
+	m^*(A\bigcup B)=m^*((A\bigcup B)\bigcap B)+m^*((A\bigcup B)\bigcap B^c)=m^*(B)+m^*(A\bigcap B^c)\\
+	\end{array}\right.$
+	
+	两式作差即得答案.
+	\item 答案是否定的.
+	
+	考虑$G=(a,b)\backslash F$是开集且$m(G)=0$,若$\exists x_0\in G,$则$\exists \delta>0,(x_0-\delta,x_0+\delta)\subset G$,故$0=m^*(G)\geqslant m^*\left((x_0-\delta,x_0+\delta)\right)=2\delta$矛盾! 
+	
+	上述矛盾说明$(a,b)\subset F$,取闭包即得$[a,b]=F$
+	
+	\item 设$\mathbb{Q}=\{r_n\}$,取$A=\displaystyle\bigcup_{n=1}^{\infty}(r_n-\frac{1}{2^n},r_n+\frac{1}{2^n})$为开集,则$\mathbb{Q}\bigcap A^c=\Phi$,且$m(A^c)=\infty$,且$A^c$为闭集.故$A^c$满足条件.
+	
+	\item 只需注意到$\displaystyle\forall x\in [0,\frac{\pi}{6}],\{y\in[0,1]:\cos(x+y)\in \mathbb{Q}\}$可数即可.(下略)
+	
+	\item $\displaystyle\varlimsup_{k\rightarrow \infty}E_k=\bigcap_{n=1}^{\infty}\bigcup_{k=n}^{\infty}E_k$,$\displaystyle m(\bigcap_{n=1}^{m}\bigcup_{k=n}^{\infty}E_k)=m(\bigcup_{k=m}^{\infty}E_k)\geqslant\sup_{k\geqslant m}m(E_k)$,对$m$取极限得:
+	
+	$\displaystyle\lim_{m\rightarrow \infty}m(\bigcup_{k=m}^{\infty}E_k)\geqslant\varlimsup_{k\rightarrow\infty}m(E_k)$.
+	
+	结合$\displaystyle m(\bigcup_{k=n}^{\infty}E_k)$有限且$\displaystyle\bigcup_{k=m}^{\infty}E_k$(关于$m$)单调递减可知:
+	
+	$\displaystyle\lim_{m\rightarrow \infty}m(\bigcup_{k=m}^{\infty}E_k)=m(\bigcap_{n=1}^{\infty}\bigcup_{k=n}^{\infty}E_k)=m(\varlimsup_{k\rightarrow \infty}E_k)$,综上可知结论成立.
+	
+	\item 设$F_k=[0,1]\backslash E_k$,则$m(F_k)=0$,则$m(\displaystyle\bigcup_{k=1}^{\infty}F_k)=0$.
+	
+	取补集得:$m(\displaystyle[0,1]\backslash\bigcup_{k=1}^{\infty}F_k)=1$,即$m(\displaystyle\bigcap_{k=1}^{\infty}E_k)=1$
+	
+	\item 不难证明$k\geqslant 2$时$(k-1)m(\displaystyle\bigcup_{i=1}^{k}E_i)+m(\bigcap_{i=1}^{k}E_i)\geqslant \sum_{i=1}^{k}m(E_i)$,由此立得结论.
+	
+	(用Venn图直观理解，这个结论是显然的)
+	
+	\item (本题的提示好像有点多余了)
+	
+	由$A\backslash C\subset (A \backslash B)\bigcup (B\backslash C)$可知:
+	
+	$m(A\backslash C)\leqslant m(A \backslash B)+m( B\backslash C)\leqslant m(A \bigtriangleup B)+m( B\bigtriangleup C)=0$故$m(A\backslash C)=0$
+	
+	同理$m(C\backslash A)=0$,故$m( A\bigtriangleup C)=0$
+	
+	
+	\item 存在有界闭集$\displaystyle K\subset G,m(K)>\lambda,$故存在有限个开球可以覆盖$K$,设$\displaystyle K\subset \bigcup_{k=1}^{m}B_k$
+	
+	再在$\displaystyle\bigcup_{k=1}^{m}B_k$中取直径最大者并令后继者与前者均不相交.这种取法必定在有限次内结束.下证这种取法满足条件.
+	
+	由取法可知互不相交.现以每一个开球的球心为中心，该球的半径的三倍为半径作球.只需证明$K$被这组新开球覆盖即可.否则设$x_0$未被覆盖,则$x_0$到每个开球$B(x_i,r_i)$的球心$x_i$距离大于$3r_i$,而由$K$可以被有限覆盖可知$x_0$在某个开球$B(y,r)$中,因$B(y,r)$未被上述取法取到,故$B(y,r)$与某个$B(x_m,r_m)$交非空,并不妨设$m$是最小的与$B(y,r)$相交的$B(x_m,r_m)$下标.此时有$2r+r_m>d(y,x_m)>3r_m$得到$r>r_m$,这与$r_m$的取法相矛盾.
+	
+	
+	
+	
+	
+	\item 
+	{\bf 法一}:取$A$的等测包$G$,则$G$可测且测度有限.设$\displaystyle B=\bigcap_{k=1}^{\infty}B_k$则有$\displaystyle m^*(E_k)=m^*(A\cap B_k)\geqslant m^*(A\cap B)=m^*(E),$故有$\displaystyle\lim_{k\rightarrow \infty}m^*(E_k)\geqslant m^*(E)$.同时由:
+	\begin{align*}
+	m^*(A\cap B_k)&\leqslant m^*(A\bigcap(\bigcap_{n=1}^{\infty}B_n))+m^*(A\bigcap(B_k\backslash \bigcap_{n=1}^{\infty}B_n))\\
+	&\leqslant m^*(A\bigcap(\bigcap_{n=1}^{\infty}B_n))+m^*(G\bigcap(B_k\backslash \bigcap_{n=1}^{\infty}B_n))\\
+	&= m^*(A\bigcap(\bigcap_{n=1}^{\infty}B_n))+m^*((G\bigcap B_k)\backslash \bigcap_{n=1}^{\infty}B_n))
+	\end{align*}
+	而$G\bigcap B_k$单调递减且可测,又有$\displaystyle m^*(G\bigcap B_1)<\infty$,故$\displaystyle \lim_{k\rightarrow \infty}m^*((G\bigcap B_k)\backslash \bigcap_{n=1}^{\infty}B_n))=0$.
+	
+	因此可以得到$\displaystyle\lim_{k\rightarrow \infty}m^*(E_k)=\lim_{k\rightarrow \infty}m^*(A\cap B_k)\leqslant m^*(A\bigcap(\bigcap_{n=1}^{\infty}B_n))=m^*(E)$
+	
+	综上可知$\displaystyle\lim_{k\rightarrow \infty}m^*(E_k)=m^*(E)$
+	
+	{\bf 法二}:显然$\displaystyle m^*(E_k)=m^*(A\cap B_k)\geqslant m^*(A\cap B)=m^*(E),$故有$\displaystyle\lim_{k\rightarrow \infty}m^*(E_k)\geqslant m^*(E)$.设$\displaystyle B=\bigcap_{n=1}^{\infty}B_n$,则$B$可测.取$A$的等测包$G$,则由$B$可测知:
+	\begin{align*}
+	0&\leqslant m^*(G\bigcap B_k)-m^*(A\bigcap B_k)\\
+	\text{(由$B_k$可测)}&=m^*(G)-m^*(G\bigcap B_k^c)-m^*(A\bigcap B_k) \\
+	\text{(由等测包)}&=m^*(A)-m^*(G\bigcap B_k^c)-m^*(A\bigcap B_k) \\
+	\text{(由$B_k$可测)}&= m^*(A\bigcap B_k^c)-m^*(G\bigcap B_k^c)\\
+	&\leqslant 0
+	\end{align*}
+	故有$m^*(G\bigcap B_k)=m^*(A\bigcap B_k)$.同理可知这个结论对$B$也成立.注意到$m^*(G\bigcap B_1)<\infty$且$G\bigcap B_k$单调递减,故有到$\displaystyle\lim_{k\rightarrow \infty}m^*(E_k)=\lim_{k\rightarrow \infty}m^*(A\cap B_k)=\lim_{k\rightarrow \infty}m^*(G\cap B_k)=m^*((G\cap \bigcap_{k=1}^{\infty}B_k))=m^*(G\bigcap B)=m^*(A\bigcap B)=m^*(E)$
+	
+	\item 否则取$E$的等测包$G$,则$H\backslash G$可测,但我们可以得到:
+	
+	$m^*(H\backslash G)\geqslant m^*(H)-m^*(G)=m^*(H)-m^*(E)>0$矛盾!
+	\item 必要性由$P_{80}$定理2.13是显然的.下证充分性.
+	
+	$\forall T\subset \mathbb{R}^n,\forall \varepsilon>0,\exists $开集$G_1,G_2,$使得$E\subset G_1,E^c\subset G_2,m(G_1\bigcap G_2)<\varepsilon.$故有:
+	\begin{align*}
+	m^*(T\cap E)+m^*(T\cap E^c)&\leqslant m^*(T\cap G_1)+m^*(T\cap G_2)\\
+	&\leqslant m^*(T\cap G_1)+m^*(T\cap G_1^c)+m^*(T\cap G_2\backslash G_1^c)\\
+	\text{(由$G_1$可测)}&\leqslant m^*(T)+m^*(G_2\backslash G_1^c)\\
+	&= m^*(T)+m^*(G_2\cap G_1)\\
+	&< m^*(T)+\varepsilon
+	\end{align*}
+	
+	由$\varepsilon$任意性可知$m^*(T\cap E)+m^*(T\cap E^c)\leqslant m^*(T)$
+	
+	进而有$m^*(T\cap E)+m^*(T\cap E^c)= m^*(T)$,由$T$的任意性可知$E$可测.
+	
+	\item 注意到$\displaystyle\sum_{k=1}^{n}m(E-\{x_k\})>2$且$\displaystyle\bigcup_{k=1}^{n}(E-\{x_k\})\subset [-1,1]$,故$\exists i,j\in \{1,2,\cdots,n\}$
+	
+	$(E-\{x_i\})\bigcap(E-\{x_j\})\neq\Phi,$也即$\exists y_1,y_2\in E,y_1-x_1=y_2-x_2,y_1-y_2=x_1-x_2$.
+	
+	即证.
+	
+	\item 否则$\displaystyle\forall n\in \mathbb{N*},\exists E_n\subset [0,1],m(E_n)\geqslant 1-\frac{1}{n},W\bigcap E_n$可测.
+	
+	故有$\displaystyle W\bigcap(\bigcup_{n=1}^{\infty}E_n)=\bigcup_{n=1}^{\infty}(W\bigcap E_n)$可测.
+	
+	注意到$\displaystyle m^*(W\bigcap([0,1]\backslash \bigcup_{n=1}^{\infty}E_n))=0$故$\displaystyle W\bigcap([0,1]\backslash \bigcup_{n=1}^{\infty}E_n)$可测.
+	
+	此时有$\displaystyle W=\left(W\bigcap([0,1]\backslash \bigcup_{n=1}^{\infty}E_n)\right)\bigcup\left(W\bigcap(\bigcup_{n=1}^{\infty}E_n)\right)$可测,矛盾!
+	
+\end{enumerate}	
+
+
+
+\newpage
+
+
+
+\part{习题三}
+
+\begin{enumerate}
+	\item 答案是否定的，比如我们可以取一个不可测集$G\subset \mathbb{R}^n,I=G,f_\alpha(x)=\chi_{\{\alpha\}}(x)$,则有$S(x)=\sup\{f_\alpha(x),\alpha\in I\}=\chi_{G}(x)$
+	不是可测函数.
+	\item 注意到$\forall t,\{(x,y)\in\mathbb{R}^2:f(x,y)<t\}$是开集.
+	
+	由$P_{34}$定理1.19可知,上述开集可写成可列个半开闭方体的并.
+	
+	设为$\displaystyle\bigcup_{k=1}^{\infty}I_k\times J_k $
+	
+	故$\displaystyle\{x\in\mathbb{R}:f(g_1(x),g_2(x))<t\}=\bigcup_{k = 1}^{\infty}(\{x\in\mathbb{R}:g_1(x)\in I_k\}\cap\{x\in\mathbb{R}:g_2(x)\in J_k\}) $
+	
+	故$\displaystyle\{x\in\mathbb{R}:f(g_1(x),g_2(x))<t\}$是可测集.由$t$任意性即证.
+	
+	\item 只需注意到$\displaystyle f'_+(x)=\lim_{n\rightarrow \infty}n(f(x+\frac{1}{n})-f(x))$及可测函数取极限封闭即可.
+	
+	\item 由$m(E)<+\infty$及$f$几乎处处有限可知$\displaystyle m(\bigcap_{k=1}^{\infty}\{x:|f(x)|>k\})=0,$故$\displaystyle\forall \varepsilon>0,\exists n,m(\bigcap_{k=1}^{n}\{x:|f(x)|>k\})<\varepsilon$
+	
+	故此时令$g(x)=\left\{\begin{array}{c}n,f(x)>n\\-n,f(x)<-n\\f(x),\text{otherwise}\end{array}\right.$即可.
+	
+	\item 设$\displaystyle M=\{x\in A:\lim_{n\rightarrow \infty}f_n(x)\neq f(x)\} $,由条件易知,$\forall \varepsilon >0,m^*(M)<\varepsilon$即$m(M)=0$.
+	
+	\item
+	必要性由$P_{112}$引理3.11显然.
+	
+	充分性:由题意易知$\displaystyle\lim_{j\rightarrow\infty}m(\bigcup_{n=1}^{\infty}\bigcup_{k\geqslant j}^{\infty}\{x\in E:|f_k(x)|\geqslant\frac{1}{n} \})=0 $
+	
+	故$\displaystyle m(\bigcap_{j=1}^{\infty}\bigcup_{n=1}^{\infty}\bigcup_{k\geqslant j}^{\infty}\{x\in E:|f_k(x)|\geqslant\frac{1}{n} \})=0 $
+	
+	$\displaystyle\forall x\notin \bigcap_{j=1}^{\infty}\bigcup_{n=1}^{\infty}\bigcup_{k\geqslant j}^{\infty}\{x\in E:|f_k(x)|\geqslant\frac{1}{n} \},\exists j>0,\forall n\in\mathbb{N*},\forall k\geqslant j,|f_k(x)|<\frac{1}{n}$故收敛.
+	
+	故$\displaystyle \lim_{k\rightarrow \infty}f_k(x)=0$~~(a.e.$x\in E$)
+	
+	\item $\forall n\in\mathbb{N*},$由Eropob定理(俄文我打不出来),$\displaystyle\exists E_n\subset [a,b],m([a,b]\backslash E_n)<\frac{1}{n},f_k(x)$在$E_n$上一致收敛.
+	
+	此时显然也有$\displaystyle m([a,b]\backslash \bigcup_{n= 1}^{\infty}E_n)=0$
+	
+	\item $\displaystyle \forall \varepsilon>0, $由依测度收敛的定义可知
+	
+	$\displaystyle\lim_{n\rightarrow \infty}m(\{x\in E:|f_n(x)-f(x)|>\frac\varepsilon2\})=0, \lim_{n\rightarrow \infty}m(\{x\in E:|g_n(x)-g(x)|>\frac\varepsilon2\})=0$
+	
+	注意到$\{x\in E:|f_n(x)+g_n(x)-g(x)-f(x)|>\varepsilon\}\subset$
+	
+	$\displaystyle \{x\in E:|f_n(x)-f(x)|>\frac\varepsilon2\}\bigcup\{x\in E:|g_n(x)-g(x)|>\frac\varepsilon2\}$
+	
+	故$\displaystyle\lim_{n\rightarrow \infty}m(\{x\in E:|f_n(x)+g_n(x)-g(x)-f(x)|>\varepsilon\})=0$,即证.
+	
+	\item 必要性:若$f_k(x)$依测度收敛于$f(x)$,故$\forall \alpha>0,\exists N,\forall n>N,m(\{x\in E:,|f_k(x)-f(x)|>\alpha\})<\alpha$
+	
+	故有:$\displaystyle\lim_{k\rightarrow \infty}\inf_{\alpha>0}\{\alpha+m(\{x\in E:,|f_k(x)-f(x)|>\alpha\})\}\leqslant\lim_{k\rightarrow \infty}\inf_{\alpha>0}\{2\alpha\}=0$.
+	
+	必要性得证.
+	
+	充分性反证:否则$\displaystyle\exists \varepsilon,\varlimsup_{k\rightarrow \infty}m(\{x\in E:,|f_k(x)-f(x)|>\varepsilon\}=\delta>0 $
+	
+	$\alpha\geqslant\varepsilon$时,$\displaystyle\alpha+m(\{x\in E:,|f_k(x)-f(x)|>\alpha\})\geqslant \varepsilon$
+	
+	$\alpha<\varepsilon$时,$\displaystyle\varlimsup_{k\rightarrow \infty}\left( \alpha+m(\{x\in E:,|f_k(x)-f(x)|>\alpha)\}\right) \geqslant \delta$,
+	
+	故$\displaystyle\varlimsup_{k\rightarrow \infty}\inf_{\alpha>0}\{\alpha+m(\{x\in E:,|f_k(x)-f(x)|>\alpha\})\}\geqslant\min\{\varepsilon,\delta\}>0$矛盾!
+	\item 反证:$\displaystyle\varliminf_{n\rightarrow\infty}f_n(x_0)\neq f(x_0),\varlimsup_{n\rightarrow\infty}f_n(x_0)\neq f(x_0)$至少有一个成立.不妨设前者成立.
+	
+	若$\displaystyle\varliminf_{n\rightarrow\infty}f_n(x_0)<f(x_0)$,由$f(x)$在$x_0$处连续可知,$\displaystyle\exists \delta>0,\varepsilon>0,\forall x_0-\delta<x<x_0,f(x)>\varliminf_{n\rightarrow\infty}f_n(x_0)+2\varepsilon$
+	
+	由下极限定义可知,$\displaystyle\forall N>0,\exists k>N,f_k(x_0)<\varliminf_{n\rightarrow\infty}f_n(x_0)+\varepsilon$
+	
+	结合$f_k(x_0)$单调递增$\displaystyle f_k(x)<\varliminf_{n\rightarrow\infty}f_n(x)+\varepsilon\leqslant\varliminf_{n\rightarrow\infty}f_n(x_0)+\varepsilon<f(x)-\varepsilon$
+	
+	故$m(\{x:|f_k(x)-f(x)|>\varepsilon\})>\delta$,与$f_n(x)$依测度收敛于$f(x)$矛盾.
+	
+	同理,若$\displaystyle\varliminf_{n\rightarrow\infty}f_n(x_0)>f(x_0)$,考虑区间$(x_0,x_0+\delta)$即可(略)
+	
+	注:本题实际上可以得到$f_n(x)\rightarrow f(x),$a.e.$x\in[0,1]$,方法是首先可得一个子列$\{f_{n_k}(x)\}$几乎处处收敛于$f(x)$,容易得到除去一个零测集外,$f(x)$单调,所以$f(x)$(在除去这个零测集后的定义域内)几乎处处连续,此时再由本题结论可知到$f_n(x)\rightarrow f(x),$a.e.$x\in[0,1]$.
+	
+	\item 本题是14题的特例,请参考14题证明.
+	
+	\item $\displaystyle\forall\varepsilon>0, \{x\in E:|f_k(x)g_k(x)|>\varepsilon\}\subset \{x\in E:|f_k(x)|>\varepsilon\}\bigcup\{x\in E:|g_k(x)|>1\}$
+	
+	且显然有$\displaystyle\lim_{n\rightarrow \infty}m(\{x\in E:|g_k(x)|>1\})=0$,$\displaystyle\lim_{n\rightarrow \infty}m(\{x\in E:|f_k(x)|>\varepsilon\})=0$
+	
+	故有$\displaystyle\lim_{n\rightarrow \infty}m(\{x\in E:|f_k(x)g_k(x)|>\varepsilon\})=0$,即证.
+	
+	\item $\forall \delta_0>0, $由$f(x)$几乎处处有限及$m([a,b])<+\infty$可知:
+	
+	$\displaystyle\exists M>0,m(\{x\in[a,b]:|f(x)|>M\})<\delta_0$,
+	
+	注意到$g$在$[-2M,2M]$上一致连续,故$\forall \varepsilon>0,\exists \delta>0,\forall |x_1-x_2|<\delta$且$-2M<x_1,x_2<2M,$有$|f(x_1)-f(x_2)|<\varepsilon$
+	\begin{align*}
+	&\displaystyle\lim_{n\rightarrow \infty}m(\{x\in[a,b]:|g(f_k(x))-g(f(x))|>\varepsilon\})\\
+	\leqslant& m(\{x\in[a,b]:|f(x)|>M\})+\\
+	&\lim_{n\rightarrow \infty}m(\{x\in[a,b]:|f(x)|\leqslant M,|g(f_k(x))-g(f(x))|>\varepsilon\})\\
+	\leqslant&\delta_0+\lim_{n\rightarrow \infty}m(\{x\in[a,b]:|f(x)|<M,|f_k(x)-f(x)|>\delta\})\\
+	=&\delta_0
+	\end{align*}
+	~~~~~~由$\delta_0$任意性可知$\displaystyle\lim_{n\rightarrow \infty}m(\{x\in[a,b]:|g(f_k(x))-g(f(x))|>\varepsilon\})=0$
+	
+	由$\varepsilon$任意性,$g(f_k(x))$依测度收敛于$g(f(x))$.
+	
+	结论对$[0,+\infty)$不成立.
+	
+	取$\displaystyle f_k(x)=x+\frac{1}{k},f(x)=x,g(x)=x^2$,即可.
+	
+	\item $\forall \varepsilon >0,\exists F,m(E\backslash F)<\varepsilon$且$f\in C(F)$.
+	
+	此时$\forall T\subset \mathbb{R}^n$,
+	\begin{align*}
+	&m^*(\{x\in E:f(x)<t\}\bigcap T)+m^*(\{x\in E:f(x)<t\}^c\bigcap T)\\
+	\leqslant&m^*(\{x\in F:f(x)<t\}\bigcap T)+\varepsilon+m^*(\{x\in E:f(x)<t\}^c\bigcap T)\\
+	\leqslant&m^*(\{x\in F:f(x)<t\}\bigcap T)+\varepsilon+m^*(\{x\in F:f(x)<t\}^c\bigcap T)\\
+	&(\text{注意到}\{x\in F:f(x)<t\}\text{可测})\\
+	=&m^*(T)+\varepsilon
+	\end{align*}
+	
+	由$\varepsilon$任意性可知:
+	
+	$m^*(\{x\in E:f(x)<t\}\bigcap T)+m^*(\{x\in E:f(x)<t\}^c\bigcap T)=m^*(T)$
+	
+	即$\{x\in E:f(x)<t\}$是可测集，再由$t$任意性可得$f(x)$是可测函数.
+	\item 只需注意到存在子列$\{f_{n_k}(x)\} $几乎处处收敛于$f(x)$即可.
+	\item $\forall \delta>0$取$\displaystyle\varepsilon=\frac{1}{n},\exists j_n\in \mathbb{N},m(\bigcup_{k = j_n}^{\infty}\{x\in E:|f_k(x)-f(x)|>\frac{1}{n}\})<\frac{\delta}{2^n}$
+	
+	对$n$取并集可知$\displaystyle m(\bigcup_{n=1}^{\infty}\bigcup_{k = j_n}^{\infty}\{x\in E:|f_k(x)-f(x)|>\frac{1}{n}\})<\delta$,设这个集合为$e$
+	
+	此时$\displaystyle\forall \varepsilon>0,\exists n,\varepsilon>\frac{1}{n},$此时$\forall k>j_n,\forall x\in E\backslash e,|f_k(x)-f(x)|<\varepsilon$,即证.
+\end{enumerate}
+\newpage
+
+
+
+
+\part{习题四}
+\begin{enumerate}
+	\item 设$\displaystyle E_n=\{x\in E:f(x)>\frac{1}{n}\} $,则有$\displaystyle m(E)=m(\bigcup_{n=1}^{\infty}E_n)$且$E_n\subset E,$故$\forall n\in\mathbb{N*}$
+	$$0=\int_{E}f(x)dx\geqslant \int_{E_n}f(x)dx\geqslant\frac{1}{n}m(E_n)$$
+	
+	所以$m(E_n)=0,$故有$\displaystyle m(E)=m(\bigcup_{n=1}^{\infty}E_n)=0$
+	
+	\item 由$f'(0) $存在可知$\exists \delta>0,\forall x\in [0,\delta),f(x)<(f'(0)+1)x$,故有:
+
+	\begin{align*}
+		\displaystyle\int_{[0,+\infty)}\frac{f(x)}{x}dx &= \int_{[0,\delta)}\frac{f(x)}{x}dx+\int_{[\delta,+\infty)}\frac{f(x)}{x}dx\\
+		&\leqslant\int_{[0,\delta)}(f'(0)+1)dx+\frac{1}{\delta}\int_{[\delta,+\infty)}f(x)dx<+\infty
+	\end{align*}
+	
+	由此即得结论.
+	\item 令$\displaystyle F=\bigcup_{k=1}^\infty E_k,f_k(x)=f(x)\chi_{E_k}(x)$则$m(E\backslash F)=0,f_k(x)\rightarrow f(x)$a.e.$x\in E$
+	
+	由Riesz定理,存在子列$\{f_{k_n}\}$,$\lim_{n\rightarrow \infty}f_{k_n}(x)=f(x)$,a.e.$x\in E$
+	
+	由Fatou引理,$\displaystyle\int_Ff(x)dx=\int_F\lim_{n\rightarrow \infty}f_{k_n}(x)dx\leqslant\varliminf_{n\rightarrow \infty}\int_Ff_{k_n}(x)dx\leqslant\varliminf_{n\rightarrow \infty}\int_{E_{k_n}}f(x)dx$
+	
+	由极限$\displaystyle \lim_{k\rightarrow \infty}\int_{E_k}f(x)dx$存在知$\displaystyle\int_F f(x)dx<+\infty$.
+	
+	结合$m(E\backslash F)=0$可知$\displaystyle\int_Ef(x)dx=\int_{E\backslash F}f(x)dx+\int_{F}f(x)dx<+\infty$
+	
+	\item 注意到$F(x)$非负且单调递增.
+	
+	若$\exists x_0,F(x_0)>0,$则$\displaystyle\int_{\mathbb{R}}F(x)dx\geqslant\int_{(x_0,+\infty)}F(x)dx=+\infty$与$F(x)\in L(\mathbb{R})$矛盾.
+	
+	故有$F(x)\equiv 0$,立得$\displaystyle\int_{\mathbb{R}} f(x)dx=0$
+	\item 只需证明:$f_k(x)\leqslant f(x)$,a.e.$x\in \mathbb{R}^n$,而这个由条件反证是显然的.
+	
+	(剩下的就是体力活了
+	
+	否则$\exists E_0\subset\mathbb{R}^n,k\in \mathbb{N*},m(E_0)>0,\forall x\in E_0,f_k(x)>f_{k+1}(x)$.
+	
+	故$\displaystyle\exists n>0,m(\{x\in E_0:f_k(x)-f_{k+1}(x)>\frac{1}{n}\})>0,$设这个集合为$F$,则:
+	
+	$$\int_{F}f_k(x)dx>\int_{F}f_{k+1}(x)dx -\frac{m(F)}{n}$$
+	
+	与条件矛盾.
+	
+	再由$P_{135}$定理4.4可得目标结论.
+	\item $$\int_{E}f(x)dx\int_{E}g(x)dx\geqslant\left(\int_{E}\sqrt{f(x)g(x)}dx\right)^2\geqslant \left(\int_{E}dx\right)^2=m^2(E)=1$$
+	\item 由条件可知,$\displaystyle\forall n\in \mathbb{N}*,\exists g_n(x),h_n(x)\in L(\mathbb{R}^n)$满足
+	$$g_n(x)\leqslant f(x)\leqslant h_n(x)$$
+	且
+	$$\displaystyle\int_{\mathbb{R}^n}(h_n(x)-g_n(x))dx<\frac{1}{n}$$
+	并不妨设$g_n(x)$关于$n$单调递增(否则令$g_n(x)=\max\{g_n(x),g_{n-1}(x)\}$)
+	
+	$\displaystyle\frac{1}{n}\geqslant\int_{\mathbb{R}^n}(h_n(x)-g_n(x))dx\geqslant\int_{\mathbb{R}^n}(f(x)-g_n(x))dx$故$\displaystyle\lim_{n\rightarrow \infty}\int_{\mathbb{R}^n}|f(x)-g_n(x)|dx=0$
+	
+	故$g_n(x)$依测度收敛于$f(x)$,故存在子列$\{g_{n_k}(x)\} $几乎处处收敛于$f(x)$,再结合$\displaystyle |g_n(x)|\leqslant |h_1(x)|+|g_1(x)|,\forall n$且$|h_1(x)|+|g_1(x)|\in L(\mathbb{R}^n)$并由控制收敛定理$(P_{154})$即得:
+	
+	$$\int_{\mathbb{R}^n}f(x)dx=\int_{\mathbb{R}^n}\lim_{k\rightarrow \infty}g_{n_k}(x)dx=\lim_{k\rightarrow \infty}\int_{\mathbb{R}^n}g_{n_k}(x)dx$$
+	
+	综上即证.
+	\item 我们先声明一个命题:$m(\{x\in \mathbb{R}^n:(f(x)-1)(f(x)-0)\neq 0\})=0$
+	
+	由这个命题立得结论.
+	
+	我们可以写成$\{x\in \mathbb{R}^n:(f(x)-1)(f(x)-0)\neq 0\}=$
+	
+	$\{x\in \mathbb{R}^n:f(x)<0\}\bigcup\{x\in \mathbb{R}^n:0<f(x)<1\}\bigcup\{x\in \mathbb{R}^n:f(x)>1\}$
+	
+	若$\displaystyle m(\{x\in \mathbb{R}^n:f(x)<0\})>0,\exists k\in\mathbb{N}*,m(\{x\in \mathbb{R}^n:f(x)<-\frac{1}{k}\})>0$,设为$A$则$\forall$可测集$E$有:
+	
+	$$\int_{\mathbb{R}^n}|\chi_E(x)-f(x)|dx\geqslant \int_{A}|\chi_E(x)-f(x)|dx\geqslant\int_{A}|f(x)|dx\geqslant\frac{m(A)}{k}>0$$
+	
+	与条件矛盾.同理可证明另外那两个集合测度为0.即证.
+	
+	注:$\displaystyle\{x\in \mathbb{R}^n:0<f(x)<1\}=\bigcup_{k=2}^{\infty}\{x\in\mathbb{R}^n:\frac{1}{k}<f(x)<1-\frac{1}{k}\}$
+	\item 设$A=[0,t]\backslash E,B=[0,t]\cap E,C=E\backslash [0,t]$
+	
+	则有$\displaystyle\int_E f(x)dx=\int_B f(x)dx+\int_C f(x)dx\geqslant\int_B f(x)dx+\int_C f(t)dx=\int_B f(x)dx+\int_A f(t)dx\geqslant\int_B f(x)dx+\int_A f(x)dx=\int_{[0,t]} f(x)dx$
+%	若$f(0)=+\infty$则显然成立
+%	
+%	若$f(0)\in \mathbb{R}$则不妨设$f(0)=0.$(否则可令$g(x)=f(x)-f(0)$)
+%	
+%	由Abel变换可知，对于$b_n\geqslant0$与单调递增的$a_n\geqslant0$,有:
+%	$$\sum_{n=1}^{\infty}a_nb_n=\sum_{n=1}^{\infty}(a_n-a_{n-1})\sum_{k=n}^{\infty}b_k$$
+%	
+%	在上式中取$\displaystyle a_n=\frac{n}{h},b_n=m(\{x\in[0,t]:\frac{n}{h}<f(x)<\frac{n+1}{h}\})$可得:
+%	$$\sum_{n=1}^{\infty}\frac{n}{h}m(\{x\in F:\frac{n}{h}<f(x)<\frac{n+1}{h}\})=\sum_{n=1}^{\infty}\frac{1}{h}m(\{x\in F:f(x)>\frac{n}{h}\})$$
+%	
+%	令$h\rightarrow +\infty$可知:
+%	$$\lim_{h\rightarrow+\infty}\sum_{n=1}^{\infty}\frac{1}{h}m(\{x\in F:f(x)>\frac{n}{h}\})=\int_{F}f(x)dx$$
+%	
+%	由$f(x)$递增及$m(E)=t$可知:
+%	$$m(\{x\in [0,1]:f(x)>\frac{n}{h}\})<m(\{x\in E:f(x)>\frac{n}{h}\})$$
+%	
+%	代入即得结论.
+%	
+%	若$f(0)=-\infty$,且$\int_{[0,t]}f(x)dx=-\infty$则显然成立.
+%	
+%	若$f(0)=-\infty$但$\int_{[0,t]}f(x)dx>-\infty$
+%	则$\forall\varepsilon>0,\exists\delta>0,\int_{[0,\delta]}|f(x)|dx<\varepsilon$,且$f(\delta)<+\infty$(若不存在则目标不等式两边均为$+\infty$),此时定义$g(x)=\left\{\begin{array}{c}f(x),x\in [\delta,1]\\f(\delta),x\in[0,\delta)\end{array}\right.$,此时$g(x)$也单调递增,故有:
+%	$$\int_{[0,t]}g(x)dx\leqslant\int_{E}g(x)dx$$
+%	
+%	注意到$\displaystyle\int_{[0,t]}g(x)dx\geqslant\int_{[0,t]}f(x)dx-\delta |f(\delta)|-\varepsilon,\int_{E}g(x)dx\leqslant\int_{E}f(x)dx+|f(\delta)|\delta+\varepsilon$
+%	
+%	令$\delta\rightarrow 0^+$可知$\delta f(\delta)\rightarrow 0$(利用$P_{141}$例六的结论)
+%	
+%	再令$\varepsilon\rightarrow 0$即得结论.
+%	
+%	综上可知证毕.
+	
+	
+	
+	\item 由$f\in L(\mathbb{R}^n)$知,$\displaystyle\forall \varepsilon>0,\exists R>0,\int_{\mathbb{R}^n\backslash B(0,R)}|f(x)|dx<\varepsilon$
+	
+	由$E$是紧集知,此时$\displaystyle\exists R_2,\forall |y|>R_2,E+\{y\}\bigcap B(0,R)=\Phi $,
+	
+	此时即有$\displaystyle\int_{E+\{y\}}|f(x)|dx\leqslant\int_{\mathbb{R}^n\backslash B(0,R)}|f(x)|dx<\varepsilon $,即证.
+	
+	\item
+	\begin{enumerate}
+		\item 设$f_n(x)=x^{\alpha-1}\e^{-nx}(>0)$,则$\displaystyle\int_{(0,+\infty)}f_n(x)dx=\frac{\Gamma(\alpha)}{n^{\alpha}}$
+		
+		则有$\displaystyle\sum_{n=1}^{\infty}\int_{[0,+\infty)}|f_n(x)|dx<+\infty $由$P_{160}$.推论4.16可知:
+		
+		$$\frac{1}{\Gamma(\alpha)}\int_{(0,+\infty)}\frac{x^{\alpha-1}}{\e^x-1}dx=\frac{1}{\Gamma(\alpha)}\int_{(0,+\infty)}\sum_{n=1}^{\infty}f_n(x)dx=\frac{1}{\Gamma(\alpha)}\sum_{n=1}^{\infty}\int_{(0,+\infty)}f_n(x)dx=\sum_{n=1}^{\infty}\frac{1}{n^\alpha}$$
+		\item
+		设$f_n(x)=\sin{ax}\e^{-nx}$,则$\displaystyle\int_{(0,+\infty)}f_n(x)dx=\frac{a}{a^2+n^2}$
+		
+		则有$\displaystyle\sum_{n=1}^{\infty}\int_{[0,+\infty)}|f_n(x)|dx\leqslant\sum_{n=1}^{\infty}\int_{[0,+\infty)}ax\e^{-nx}dx=\sum_{n=1}^{\infty}\frac{a}{n^2}<+\infty $
+		
+		由$P_{160}$推论4.16可知:
+		
+		$$\int_{(0,+\infty)}\frac{\sin{ax}}{\e^x-1}dx=\int_{(0,+\infty)}\sum_{n=1}^{\infty}f_n(x)dx=\sum_{n=1}^{\infty}\int_{(0,+\infty)}f_n(x)dx=\sum_{n=1}^{\infty}\frac{a}{a^2+n^2}$$
+	\end{enumerate} 
+	\item 注意到:
+	
+	$\displaystyle \sum_{n=-\infty}^{\infty}\int_{[0,a]}\left|f(\frac{x}{a}+n)\right|dx=\sum_{n=-\infty}^{\infty}\frac{1}{a}\int_{[n,n+1]}|f(x)|dx=\frac{1}{a}\int_{(-\infty,+\infty)}|f(x)|dx<+\infty$
+	
+	故$\displaystyle\int_{[0,a]}\sum_{n=-\infty}^{\infty}\left|f(\frac{x}{a}+n)\right|dx= \sum_{n=-\infty}^{\infty}\int_{[0,a]}\left|f(\frac{x}{a}+n)\right|dx<+\infty$
+	
+	故$\displaystyle\sum_{n=-\infty}^{\infty}|f(\frac{x}{a}+n)|<+\infty$,a.e.$x\in [0,a]$,又显然是以$a$为周期的周期函数.故对$\mathbb{R}$上几乎处处成立,也即几乎处处绝对收敛.
+	
+	由上述证明也可知$\displaystyle\int_{[0,a]}|S(x)|dx<+\infty$故$S(x)\in L([0,a])$且$S(x)$以$a$为周期.
+	
+	\item 设$\displaystyle f_n(x)=\frac{f(nx)}{n^p}$,则$\displaystyle\int_{\mathbb{R}}|f_n(x)|dx=\frac{\int_{\mathbb{R}}|f(x)|dx}{n^{p+1}}$故$\displaystyle\sum_{n=1}^{\infty}\int_{\mathbb{R}}|f_n(x)|dx<+\infty$
+	
+	故有$\displaystyle\int_{\mathbb{R}}\sum_{n=1}^{\infty}|f_n(x)|dx=\sum_{n=1}^{\infty}\int_{\mathbb{R}}|f_n(x)|dx<+\infty$
+	
+	所以$\displaystyle\sum_{n=1}^{\infty}|f_n(x)|<+\infty,$a.e.$x\in\mathbb{R}$
+	
+	故有$\displaystyle\lim_{n\rightarrow \infty}\frac{f(nx)}{n^p}=\lim_{n\rightarrow \infty}f_n(x)=0,$a.e.$x\in\mathbb{R}$
+	
+	\item 不妨设$f(x)\geqslant 0$,否则可设$f(x)=f^+(x)-f^-(x)$,证明方法相同.
+	
+	注意到$x^uf(x)\leqslant x^sf(x)+x^tf(x)\in L((0,\infty))$故$x^uf(x)\in L((0,\infty))$
+	
+	现固定$u\in(s,t)$,则$\displaystyle\int_{(0,\infty)}(x^{u+\Delta u}-x^u)dx=\int_{(0,1)}(x^{u+\Delta u}-x^u)dx+\int_{(1,\infty)}(x^{u+\Delta u}-x^u)dx$
+	
+	注意到$x\in(0,1)$时$x^u(x^{\Delta u}-1)$一致收敛于$0(\Delta u\rightarrow 0)$.
+	
+	故$\displaystyle\lim_{\Delta u\rightarrow 0}\int_{(0,1)}(x^{u+\Delta u}-x^u)dx=0$
+	
+	注意到$x\in(1,+\infty)$时$(x^{u+\Delta u-t}-x^{u-t})$一致收敛于$0(\Delta u\rightarrow 0)$及$x^tf(x)\in L((1,+\infty))$
+	
+	故$\displaystyle\lim_{\Delta u\rightarrow 0}\int_{(1,+\infty)}x^tf(x)(x^{u+\Delta u-t}-x^{u-t})dx=0$
+	
+	综合上述结论,$\displaystyle\lim_{\Delta u\rightarrow 0}\int_{(0,+\infty)}\left(f(x)x^{u+\Delta u}-f(x)x^{u}\right)dx=0$,故连续.
+	
+	\item 首先证明$m(\{x\in(0,1):f(x)>1\})=0$,证明过程同第8题.
+	
+	此时$0\leqslant1-f(x)^n$且关于$n$单调递增,由$P_{135}$定理4.4(Levi引理)可知:
+	$$\displaystyle1-c=\lim_{n\rightarrow \infty}\int_{(0,1)}(1-f(x)^n)dx=\int_{(0,1)}\lim_{n\rightarrow \infty}(1-f(x)^n)dx=1-m(\{x\in(0,1):f(x)=1\})$$	
+	在条件中取$n=1$得$\displaystyle\int_{(0,1)}f(x)dx=c=m(\{x\in(0,1):f(x)=1\})$即有:
+	$$m(\{x\in(0,1):0<f(x)<1\})=0$$
+	
+	由此即得结论.
+	
+	另外,去掉$f(x)$非负这一条件后,设$g(x)=f(x)^2$,则$g(x)$非负且满足:
+	$$\int_{(0,1)}g(x)^ndx=c,\forall n\in\mathbb{N*}$$
+	所以设$g(x)=\chi_E(x)$,再由$\int_{(0,1)}(g(x)-f(x))dx=0 $易得$f(x)=g(x)$,a.e.$x\in(0,1)$
+	
+	\item 只需注意到$\displaystyle n\ln(1+\frac{|f(x)|^2}{n^2})\leqslant n\frac{|f(x)|}{n}=|f(x)|$,再由控制收敛定理即得结论.
+	
+	\item $\displaystyle\int_{E_k}f(x)dx=\int_{E_1}f(x)\chi_{E_k}(x)dx=:\int_{E_1}f_k(x)dx$
+	则$\displaystyle\lim_{k\rightarrow \infty} f_k(x)=f(x)\chi_{E}(x)$,a.e.$x\in E_1$
+	
+	显然$|f_k(x)|\leqslant|f_1(x)|\in L(E_1)$,故由控制收敛定理得:
+	$$\lim_{k\rightarrow \infty}\int_{E_k}f(x)dx=\lim_{k\rightarrow \infty}\int_{E_1}f_k(x)dx=\int_{E_1}\lim_{k\rightarrow \infty}f_k(x)dx=\int_{E_1}f(x)\chi_{E}(x)dx=\int_{E}f(x)dx$$
+	
+	\item 当$m(E)<+\infty$时,由$\displaystyle f\in L(E),$
+	
+	$\displaystyle\forall\varepsilon>0,\exists \delta\in(0,1),m(\{x\in E:\delta<f(x)<\frac{1}{\delta}\})>m(E)-\varepsilon$.
+	
+	设这个集合为$A$,则$\forall 0<a<1<b<+\infty$,$\exists N,k>N$时$\displaystyle\forall x\in A ,a<f(x)^{\frac{1}{k}}<b$故$\displaystyle\lim_{k\rightarrow \infty}f(x)^{\frac{1}{k}}=1,x\in A$,由$\varepsilon$任意性,有$\displaystyle\lim_{k\rightarrow \infty}f(x)^{\frac{1}{k}}=1,$a.e.$x\in E$
+	
+	结合$f(x)^\frac{1}{k}\leqslant \max\{f(x),1\}\leqslant f(x)+1\in L(E)$并由控制收敛定理可知:
+	$$\lim_{k\rightarrow \infty}\int_{E}(f(x))^{\frac{1}{k} }dx=\int_{E}\lim_{k\rightarrow \infty}(f(x))^{\frac{1}{k} }dx=m(E)$$
+	综上可得结论对$m(E)<+\infty$时成立.
+	
+	$m(E)=+\infty$时,上式对$E$的任意测度有限的子集成立.故
+	$$\displaystyle\lim_{k\rightarrow \infty}\int_{E}(f(x))^{\frac{1}{k} }dx>M,\forall M>0$$
+	
+	由此即得结论.
+	
+	\item 本题条件给少了一条，需要加上条件:$f\in L([0,1])$,否则有反例:$\displaystyle f(x)=\frac{1}{x}$
+	
+	$\displaystyle f_n(x)=\left\{\begin{array}{c}\displaystyle\frac{1}{x},\frac{1}{n}<x<1-\frac{1}{n}\\\displaystyle\frac{1}{1-x},1-\frac{1}{n}<x<1-\frac{1}{n^2}\\\displaystyle0,\text{otherwise}\end{array}\right.$
+	
+	此时显然有$f_n(x)$依测度收敛于$f(x)$,且
+	$$\displaystyle\lim_{n\rightarrow \infty}\int_{[0,1]}f_n(x)dx=+\infty=\int_{[0,1]}f(x)dx$$
+	
+	但取$\displaystyle E=[\frac{1}{2},1]$,$\displaystyle\lim_{n\rightarrow \infty}\int_Ef_n(x)dx=+\infty>\int_Ef(x)dx $,与条件矛盾.
+	
+	接下来在加上这个条件的情况下证明这个命题.
+	
+	$\forall \varepsilon>0$,设$\displaystyle E_n=\{x\in[0,1]:|f_n(x)-f(x)|<\varepsilon\}$,则$\displaystyle\lim_{n\rightarrow \infty}m(E_n)=1$
+	
+	此时$\displaystyle\int_{[0,1]}(f_n(x)-f(x))dx=\int_{E_n}(f_n(x)-f(x))dx+\int_{[0,1]\backslash E_n}(f_n(x)-f(x))dx$
+	
+	由左侧极限为0且$\displaystyle\varlimsup_{n\rightarrow \infty}\left|\int_{E_n}(f_n(x)-f(x))dx\right|<\varepsilon $可知:
+	
+	$$\displaystyle\varlimsup_{n\rightarrow\infty}\left|\int_{[0,1]\backslash E_n}(f_n(x)-f(x))dx\right|<\varepsilon$$
+	
+	由积分的绝对连续性可知:
+	$$\displaystyle\lim_{n\rightarrow \infty}\int_{[0,1]\backslash E_n}f(x)dx=0$$
+	
+	故有:
+	
+	$$\displaystyle\varlimsup_{n\rightarrow\infty}\int_{[0,1]\backslash E_n}f_n(x)dx<\varepsilon$$
+	
+	下面这个式子是显然的:
+	
+	$$\displaystyle\int_E (f_n(x)-f(x))dx=\int_{E\cap E_n} (f_n(x)-f(x))dx+\int_{E\cap E_n^c} (f_n(x)-f(x))dx$$
+	
+	由前述易知:$\displaystyle \int_{E\cap E_n} |f_n(x)-f(x)|dx<\varepsilon$,且有:
+	$$\displaystyle\int_{E\cap E_n^c} |f_n(x)-f(x)|dx<\int_{E\cap E_n^c}f_n(x)dx+\int_{E\cap E_n^c}f(x)dx$$
+	
+	注意到$\displaystyle\int_{E\cap E_n^c}f_n(x)dx<\varepsilon,\lim_{n\rightarrow \infty}\int_{E\cap E_n^c}f(x)dx=0$
+	
+	所以$\displaystyle\varlimsup_{n\rightarrow \infty}\left| \int_E (f_n(x)-f(x))dx\right| <2\varepsilon$,由$\varepsilon$任意性即得结论.	
+	
+	\item 设$\displaystyle\sup_{1\leqslant k\leqslant n }\{f_k(x)\}=g_n(x),$则$g_n(x)$关于$n$递增.且$\displaystyle\int_{E}g_n(x)dx\leqslant M$
+	
+	设$\displaystyle\lim_{n\rightarrow \infty}g_n(x)=g(x)$,由$P_{135}$定理4.4(Levi引理)可知
+	
+	$$\int_E g(x)dx=\lim_{n\rightarrow \infty}\int_Eg_n(x)dx\leqslant M$$
+	
+	故有$g(x)\in L(E)$,此时由$|f_k(x)|\leqslant g(x)$并由控制收敛定理即得:
+	
+	$$\lim_{k\rightarrow \infty}\int_Ef_k(x)dx=0$$
+	
+	
+	\item 只考虑$m(E)<+\infty$的情况，否则$E$可写为可列个两两不交的测度有限区间的并.
+	
+	若$f\in L(E)$,$\forall \varepsilon>0,$设$E_n=\{x\in E:|f_n(x)-f(x)|<\varepsilon \}$则$\displaystyle\lim_{n\rightarrow \infty}m(E_n)=m(E)$,因此:
+	\begin{align*}
+		\int_E(f(x)-f_n(x))dx&=\int_{E_n}(f(x)-f_n(x))dx+\int_{E\backslash E_n}(f(x)-f_n(x))dx\\
+		&<\varepsilon m(E)+\int_{E\backslash E_n}f(x)dx
+	\end{align*}
+	
+	其中最后一步用到了$f_n(x)\geqslant 0$.
+	
+	由$f\in L(E)$可知$\displaystyle\lim_{n\rightarrow \infty}\int_{E\backslash E_n}f(x)dx=0$.结合$\varepsilon$任意性可知:
+	$$\varlimsup_{n\rightarrow \infty}\int_{E}(f(x)-f_n(x))dx\leqslant 0$$
+	
+	故有:$$\int_{E}f(x)dx\leqslant\varliminf_{n\rightarrow \infty}\int_{E}f_n(x)dx$$
+	
+	当$\displaystyle\int_{E}f(x)dx=+\infty$时,只需证明$\displaystyle\lim_{n\rightarrow \infty}\int_Ef_n(x)dx=+\infty$
+	
+	注意到$f(x)\geqslant0$,a.e.$x\in E$且下列结论由Lebesgue积分定义,是显然的:
+	$$\displaystyle\forall M>0,\exists \delta>0,\forall m(E\backslash A)<\delta \text{且} A\subset E ,\text{有} \int_Af(x)dx>M$$
+	
+	$f_n(x)$依测度收敛于$f(x)$,$\forall \varepsilon>0,\exists N,\forall n>N,m(\{x\in E:|f(x)-f_n(x)|>\varepsilon\})<\delta$
+	
+	此时有$\displaystyle\varliminf_{n\rightarrow\infty}\int_Ef_n(x)dx>M-\varepsilon m(E)$由$M,\varepsilon$任意性即得结论.	
+	
+	
+	
+	
+	\item 略.
+	
+	\item 同第5题可知$f_k(x)\leqslant f_{k+1}(x),$a.e.$x\in\mathbb{R}^n$可得$\displaystyle\lim_{k\rightarrow \infty}f_k(x)$几乎处处存在$(+\infty$也视为存在).设$\displaystyle g(x)=\lim_{k\rightarrow \infty}f_k(x)$
+	
+	由5结论知$\displaystyle\lim_{k\rightarrow \infty}\int_Ef_k(x)dx=\int_Eg(x)dx$
+	
+	故$\displaystyle\int_E (f(x)-g(x))dx=0$对任意$E\subset \mathbb{R}^n$成立.
+	
+	故有$f(x)=g(x),$a.e.$x\in\mathbb{R}^n $即$\displaystyle \lim_{k\rightarrow \infty}f_k(x)=f(x)$,a.e.$x\in\mathbb{R}^n $
+	
+	
+	\item 注意到$|f_k(x)-f(x)|\leqslant g(x)+g_k(x)$
+	
+	由$P_{139}$Fatou引理可知:
+	\begin{align*}
+		&\displaystyle\varliminf_{k\rightarrow \infty}\int_E(g_k(x)+g(x)-|f_k(x)-f(x)|)dx\\
+		\geqslant &\int_E\lim_{k\rightarrow \infty}\left(g_k(x)+g(x)-|f_k(x)-f(x)|\right)dx=2\int_Eg(x)dx
+	\end{align*}
+	
+	注意到$\displaystyle\varliminf_{k\rightarrow \infty}\int_E(g_k(x)+g(x))dx=2\int_Eg(x)dx$
+	
+	故有$\displaystyle\varlimsup_{k\rightarrow \infty}\int_E|f_k(x)-f(x)|)dx\leqslant 0$,故等号成立.
+	
+	此时即有$\displaystyle\lim_{k\rightarrow \infty}\int_Ef_k(x)dx=\int_Ef(x)dx$
+	
+	\item 由条件知$D$的极限点只有可列个，故$D$只有可列个点.故$m(D)=0$
+	
+	故有$\displaystyle\int_{[a,b]}w_f(x)dx=\int_{D}w_f(x)dx=0$.故$f(x)$黎曼可积.
+	
+	\item 由条件可得$w_f(x)=0$,a.e.$x\in \mathbb{R}$故对任意$[a,b]\subset \mathbb{R}$黎曼可积.
+	
+	\item 只需注意到$\displaystyle\{x:w_{\chi_{E}}(x)=1\}=\overline{E}\backslash\mathring{E}$即可.
+	
+	\item 由$f\in R([0,1])$可得$f$有界.设$|f|\leqslant M$
+	
+	由$\displaystyle\int_{[0,1]}f(x^2)dx=\int_{[0,1]}\frac{f(x)}{2\sqrt{x}}dx$,设$\displaystyle g(x)=\frac{f(x)}{2\sqrt{x}}$,则$\displaystyle w_g(x)=\frac{w_f(x)}{2\sqrt{x}}$.
+	
+	则有$|w_f(x)|\leqslant2M.$此时$\forall\delta>0$
+	\begin{align*}
+	\int_{[0,1]}w_g(x)dx&=\int_{(0,\delta)}w_g(x)dx+\int_{(\delta,1)}w_g(x)dx\\
+	&\leqslant\int_{(0,\delta)}\frac{2}{\sqrt{x}}\dot 2Mdx+\int_{(\delta,1)}\frac{2}{\delta}w_f(x)dx\\
+	&\leqslant 2M\sqrt\delta+\frac{2}{\delta}\int_{[0,1]}w_f(x)dx\\
+	&=2M\sqrt\delta
+	\end{align*}
+	
+	由$\delta$任意性,可得$\displaystyle\int_{[0,1]}w_g(x)dx=0$,即证.
+	
+	\item 由$f(x)+g(y)\in L(R\times R)$,由$P_{181}$Fubini定理知,对于几乎处处$x,f(x)+g(y)$在$y\in E$可积.
+	
+	此时有$\displaystyle\int_{E}( f(x)+g(y) )dy=m(E)f(x)+\int_{E}g(y)dy$故必有$g(y)\in L(E)$
+	
+	同理有$f(x)\in L(E).$
+	\item \begin{enumerate}
+		\item 注意到$\displaystyle\frac{1}{(1+y)(1+x^2y)}$非负可测,由$P_{178}$Tonelli定理知:
+		\begin{align*}
+			\displaystyle\int_{x>0}\int_{y>0}\frac{dxdy}{(1+y)(1+x^2y)} &= \int_{y>0}\left(\int_{x>0}\frac{dx}{(1+y)(1+x^2y)}\right)dy\\
+			&= \int_{y>0}\frac{\pi}{2}\frac{1}{\sqrt{y}(1+y)}dy=\frac{\pi^2}{2}
+		\end{align*}
+		\item 注意到$\displaystyle\int_0^1\frac{\ln x}{x^2-1}dx=\int_{+\infty}^{1}\frac{\ln \frac{1}{x} }{\frac{1}{x^2}-1  }d\frac{1}{x}=\int_1^{+\infty}\frac{\ln x}{x^2-1}dx$
+		
+		故有
+		\begin{align*}
+			\displaystyle\int_0^{+\infty}\frac{\ln x}{x^2-1}dx &=2\int_0^1\frac{\ln x}{x^2-1}dx=-2\int_0^1\ln x\sum_{n=0}^{\infty}x^{2n}dx\\
+			&=-2\sum_{n=0}^{\infty}\int_0^1 x^{2n}\ln xdx=\sum_{n=0}^{\infty}\frac{2}{(2n+1)^2}=\frac{\pi^2}{4}
+		\end{align*}
+	\end{enumerate}
+	\item 设$g(x,t)=f(x-t)\chi_E(t) $非负可测,由$P_{178}$Tonelli定理可知:
+	
+	$$\int_{\mathbb{R}}(\int_{\mathbb{R}}g(x,t)dt)dx=\int_{\mathbb{R}}(\int_{\mathbb{R}}g(x,t)dx)dt=\int_{\mathbb{R}}(\int_{\mathbb{R}}f(x)\chi_E(t)dx)dt=m(E)\int_{\mathbb{R}}f(x)dx$$
+	
+	结合$\displaystyle\int_{\mathbb{R}}(\int_{\mathbb{R}}g(x,t)dt)dx=\int_{\mathbb{R}}F(x)dx<+\infty$和$m(E)<+\infty$可知:
+	
+	$\displaystyle\int_{\mathbb{R}}f(x)dx<+\infty$,即$f\in L(\mathbb{R})$
+	
+	\item 由$\displaystyle\int_{\mathbb{R}}f(x)dx=0$可知,$\displaystyle\forall t,\left|\int_{(-\infty,t)}f(x)dx\right|=\left|\int_{(t,+\infty)}f(x)dx\right|$
+	
+	此时
+	\begin{align*}
+		\displaystyle\int_{\mathbb{R}}|F(x)|dx=\int_{(-\infty,0)}\left|\int_{(-\infty,x)}f(t)dt\right|dx+\int_{(0,+\infty)}\left|\int_{(x,+\infty)}f(t)dt\right|dx
+	\end{align*}
+	
+	设$g(t)=|tf(t)|$,则$g(t)\in L(\mathbb{R}),g(t)\geqslant 0$.由$P_{181}$Fubini定理知:
+	
+	有
+	\begin{align*}
+		\displaystyle\int_{(0,+\infty)}\left|\int_{(x,+\infty)}f(t)dt\right|dx &\leqslant\int_{(0,+\infty)}\left(\int_{(x,+\infty)}\frac{g(t)}{t}dt\right)dx\\
+		&=\int_{(0,+\infty)}\left(\int_{(0,t)}\frac{g(t)}{t}dx\right)dt =\int_{(0,+\infty)}g(t)dt<+\infty
+	\end{align*}
+	
+	同理$\displaystyle\int_{(-\infty,0)}\left|\int_{(-\infty,x)}f(t)dt\right|dx<+\infty$
+	
+	故有$\displaystyle\int_{\mathbb{R}}|F(t)|dt<+\infty$即$F\in L(\mathbb{R})$
+	\item 设$f_n(x)=\cos x \arctan nx$则$f_n(x)$非负且关于$n$单调.且$\displaystyle\lim_{n\rightarrow \infty}f_n(x)=\cos x$,故有:
+	$$\lim_{n\rightarrow \infty}\int_0^\frac{\pi}{2}\cos x \arctan{nx}dx=\int_0^\frac{\pi}{2}\cos xdx=1 $$
+	\item 当$f(t)\geqslant0$时,$\displaystyle\frac{f(t)}{t}\chi_{\{t:t>x\}}(t)$非负可测,由$P_{178}$Tonelli定理知:
+
+	\begin{align*}
+		\displaystyle\int_0^a g(x)dx &=\int_0^a(\int_0^a\frac{f(t)}{t}\chi_{\{t:t>x\}}(t)dt)dx=\int_0^a(\int_0^t\frac{f(t)}{t}dx)dt\\
+		&=\int_0^af(t)dt=\int_0^af(x)dx 
+	\end{align*}
+	
+	对于一般情况，只需考虑$f(x)=f^+(x)-f^-(x)$即可.
+\end{enumerate}
+
+\part{习题五}
+
+由于本部分的部分习题过难,作者自己也不会,或者用了一些很困难的结论,所以这些题目的答案就不写了.
+
+这些很困难的结论(看看就好)包括:
+
+$\frac{d\bigvee_a^x(f)}{dx}=f'(x)$;处处可微的函数必定绝对连续.
+\begin{enumerate}
+	\item
+	\item 令$\displaystyle f_n(x)=\frac{\chi_{\{x>x_n\} } }{2^n},f(x)=\sum_{n=1}^{\infty} f_n(x)$.由柯西收敛准则知$f(x)$在$[a,b]$上处处有定义,由$f_n(x)$均递增可知$f(x)$递增.
+	
+	(若要严格递增,只需设$g(x)=f(x)+x$即可)
+	\item 注意到$f'(x)$几乎处处存在.故若结论不成立,则$\exists \delta_0>0,\varepsilon_0>0,m(\{x\in E:f'(x)>\delta_0\})>\varepsilon_0$,设这个集合为$F$,则$\displaystyle\forall (a_i,b_i)\in (a,b)(i=1,2,\cdots)\&\bigcup_{i}(a_i,b_i)\supset E,$,有$\displaystyle\bigcup_{i}(a_i,b_i)\supset F,$故有$\displaystyle\sum_{i}[f(b_i)-f(a_i)]>\varepsilon_0\delta_0$,令$\varepsilon=\varepsilon_0\delta_0$即得矛盾.
+	\item 先证明一个结论:
+	\begin{Lemma}
+		若$g(x)$单调递增,则$\displaystyle F(x)=\frac{1}{x}\int_{0}^{x}g(t)dt$在$x>0$时单调递增.
+	\end{Lemma}
+	\begin{Proof}
+		$\forall 0<x_1<x_2$,
+		\begin{align*}
+				F(x_2)-F(x_1)=&\frac{1}{x_2}\int_{0}^{x_2}g(x)dx-\frac{1}{x_1}\int_{0}^{x_1}g(x)dx\\
+				=&\frac{1}{x_2}\int_{x_1}^{x_2}g(x)dx-\frac{x_2-x_1}{x_1x_2}\int_{0}^{x_1}g(x)dx\\
+				\geqslant&\frac{1}{x_2}\int_{x_1}^{x_2}g(x_1)dx-\frac{x_2-x_1}{x_1x_2}\int_{0}^{x_1}g(x)dx\\
+				\geqslant&\frac{x_2-x_1}{x_2}g(x_1)-\frac{x_2-x_1}{x_1x_2}\int_{0}^{x_1}g(x)dx\\
+				\geqslant&\frac{x_2-x_1}{x_1x_2}\int_{0}^{x_1}( g(x_1)-g(x) )dx\\
+				\geqslant&0\\
+		\end{align*}
+		
+		即证
+	\end{Proof}
+	
+	由$f(x)\in BV([0,a])$设$f(x)=f_1(x)-f_2(x)$,其中$f_i(x)$在$[a,b]$上单调递增$(i=1,2)$
+	
+	故$\displaystyle F(x)=\frac{1}{x}\int_{0}^{x}f_1(t)dt-\frac{1}{x}\int_{0}^{x}f_2(t)dt$是两个递增函数的差，即得$f(x)\in BV([a,b])$.
+	\item 由$\displaystyle \lim_{n\rightarrow \infty}f_n(x)=f(x)$可知,$\displaystyle\forall a=x_0<x_1<\cdots<x_m<x_{m+1}=b,\exists N,\forall n>N,\forall i\in\{0,1,\cdots,m+1\},|f_n(x_i)-f(x_i)|<\frac{\varepsilon}{m+1}$
+	
+	故有$\displaystyle\sum_{i=0}^{m}|f(x_{i+1})-f(x_i)|<\sum_{i=0}^{m}|f_n(x_{i+1})-f_n(x_i)|+\varepsilon\leqslant\bigvee_{a}^{b}f_n(x)+\varepsilon\leqslant M+\varepsilon$
+	
+	由$\varepsilon$任意性可知结论成立.
+	\item 由$f(x)\in BV([a,b])$可知存在递增函数$f_1(x),f_2(x),f(x)=f_1(x)-f_2(x)$
+	
+	设$\displaystyle g_1(x)=\left\{\begin{array}{c}\displaystyle
+	f_1(x),a\leqslant x<x_0\\
+	\displaystyle\lim_{t\rightarrow x_0-}f(t),x=x_0\\
+	\displaystyle f_1(x)-\lim_{t\rightarrow x_0+}f(t)+\lim_{t\rightarrow x_0-}f(t),x>x_0
+	\end{array}\right.$,则$g_1(x)$显然$g_1(x)$单调递增且在$x_0$处连续.
+	
+	设$g_2(x)=f(x)-g_1(x)$,注意到$x>x_0$时$g_2(x)$单调递增,$x<x_0$时$g_2(x)$单调递增,且$x_0$处$g_2(x)$连续,故有$g_2(x)$在$[a,b]$上单调递增.
+	
+	此时$g_1(x),g_2(x)$在$[a,b]$上单调递增且在$x_0$处连续,故$\displaystyle\bigvee_{a}^{x}(f_1),\bigvee_{a}^{x}(f_2)$在$x_0$处连续,故有$\displaystyle\bigvee_{a}^{x}(f)$在$x_0$处连续.
+	\item
+	\item 由$\displaystyle|\int_{a}^{b}f(x)dx|^2\leqslant (g(b)-g(a)  )(b-a)$可知:
+	$$\displaystyle|\frac{\int_{a}^{b}f(x)dx}{b-a}|^2\leqslant \frac{g(b)-g(a)}{b-a}$$
+	
+	固定$a$并令$b\rightarrow a$可得:$f^2(x)\leqslant g'(x),$~~a.e.
+	
+	由$\int_{a}^{b}g'(x)dx\leqslant g(b)-g(a)$知$g'(x)\in L([a,b])$故$f^2(x)\in L([a,b
+	])$
+	\item 首先，$[a,b]$上得绝对连续函数必定有界,设$f(x)\leqslant M$,故$\forall x_1,x_2\in [a,b],|f^p(x_1)-f^p(x_2)|\leqslant pM^{p-1}|f(x_1)-f_(x_2)|$由此及绝对连续函数的定义,立得结论.
+	\item $\displaystyle\forall x\in [a,b],\int_{a}^{b}f'(t)dt=f(b)-f(x)+f(x)-f(a)\geqslant\int_{a}^{x}f'(t)dt+\int_{x}^{b}f'(t)dt=\int_{a}^{b}f'(t)dt$,故等号必定取到,故有$\displaystyle f(x)-f(a)=\int_{a}^{x}f'(t)dt$.故$f(x)\in AC([a,b])$.
+	\item
+	\item
+	\item
+	\item 由$f'_y(x,y)\in L([a,b]\times[c,d])$及$Fubini$定理可知:
+	
+	$\displaystyle\int_{c}^{y}(\int_a^b f'_y(x,t)dx )dt=\int_a^b(\int_{c}^{y} f'_y(x,t)dt )dx=\int_a^b(\int_{c}^{y} f'_y(x,t)dt )dx=\int_a^b (f'_y(x,y)-f'_y(x,c) )dx=F(y)-F(c)$
+	
+	故有$F(y)\in AC([c,d])$且有$\displaystyle F'(y)=\int_{a}^{b} f'_y(x,y)dt $
+	\item %设$F(x)=\int_{0}^{x}f(t)dt,$则$F'(x)=f(x)$
+	\item $\displaystyle f(x)=|x|$
+	\item 注意到$|g'_k(x)|\leqslant F(x)\in L(E)$,由控制收敛定理:
+	$$\displaystyle g(x)-g(a)=\lim_{k\rightarrow \infty}( g_k(x)-g_k(a) )=\lim_{k\rightarrow \infty}\int_a^x g'_k(t)dt=\int_a^x\lim_{k\rightarrow \infty} g'_k(t)dt=\int_a^x f(t)dt$$
+	
+	故有$g'(x)=f(x)$a.e.$x\in [a,b]$.
+	\item 
+	\item 只需注意到$\exists L>0,\forall x_1,x_2\in[a,b],|f(g(x_1))-f(g(x_2))|\leqslant L|g(x_1)-g(x_2)|$即可.
+\end{enumerate}
+
+\part{习题六}
+由于本部分的部分习题过难,且作者水平有限,学习进度不足,所以大部分题目的答案就不写了.
+
+\begin{enumerate}
+	\item 
+	\item 
+	\item 
+	\item 由赫尔德不等式:
+	\begin{align*}
+		\displaystyle g^2(x) &=(\int_0^1\frac{f(t)}{|x-t|^{\frac{1}{2}}}dt)^2\leqslant \int_0^1\frac{f^2(t)}{|x-t|^{\frac{1}{2}}}dt\int_0^1\frac{1}{|x-t|^{\frac{1}{2}}}dt\\
+		&=(2\sqrt{x}+2\sqrt{1-x})\int_0^1\frac{f^2(t)}{|x-t|^{\frac{1}{2}}}dt\leqslant2\sqrt2\int_0^1\frac{f^2(t)}{|x-t|^{\frac{1}{2}}}dt,
+	\end{align*}
+	代入目标式即有:
+	$$\displaystyle\int_0^1 g^2(x)dx\leqslant2\sqrt2\int_0^1 \int_0^1\frac{f^2(t)}{|x-t|^{\frac{1}{2}}}dtdx=2\sqrt2\int_0^1 f^2(t)dt\int_0^1\frac{1}{|x-t|^{\frac{1}{2}}}dx\leqslant 8\int_0^1 f^2(t)dt$$
+	
+	开平方即得结论.
+	\item 若存在,则在$L^2$空间中,$d(f(x),\sin{x})\leqslant\frac{2}{3},d(f(x),\cos{x})\leqslant\frac{1}{3}$,但$d(\sin{x},\cos{x})=\sqrt\pi$,与三角不等式矛盾.
+	\item 由赫尔德不等式:
+	
+	$\displaystyle\int_{x}^{x+h}|f(t)|dt\leqslant(\int_{x}^{x+h}|f(t)|^pdt)^{\frac{1}{p}}(\int_{x}^{x+h}dt)^{\frac{1}{p'} }= (\int_{x}^{x+h}|f(t)|^pdt)^{\frac{1}{p}}|h|^{\frac{1}{p'} }$
+	
+	由$f\in L^p(\mathbb{R})$可知$\displaystyle\lim_{h\rightarrow 0}(\int_{x}^{x+h}|f(t)|^pdt)^{\frac{1}{p}}=0$
+	
+	即有$\displaystyle\frac{\int_{x}^{x+h}|f(t)|dt}{|h|^{\frac{1}{p'} }}\rightarrow 0,h\rightarrow 0 $ 
+	
+	结合$\displaystyle |F(x+h)-F(x)|\leqslant \int_{x}^{x+h}|f(t)|dt$即得:
+		
+	$|F(x+h)-F(x)|=o(|h|^{\frac{1}{p'} })$
+	\item 注意到$||g_k(x)||_q=1$由赫尔德不等式:
+	
+	$\displaystyle\int_{\mathbb{R}^n}g_k(x)f(x)dx=\int_{E_k}g_k(x)f(x)dx\leqslant ||g_k(x)||_q(\int_{E_k}|f(x)|^pdx)^{\frac{1}{p}}=(\int_{E_k}|f(x)|^pdx)^{\frac{1}{p}}$
+	
+	结合$m(E_k)\rightarrow 0,f\in L^p(\mathbb{R}^n) $即得:
+	
+	$\displaystyle\lim_{k\rightarrow \infty}\int_{\mathbb{R}^n}g_k(x)f(x)dx=0$
+\end{enumerate}
+
+\end{document}
